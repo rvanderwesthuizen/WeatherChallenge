@@ -6,12 +6,35 @@
 //
 
 import UIKit
+import CoreLocation
 
 class MainTableViewController: UITableViewController {
+    
+    let locationManager = CLLocationManager()
+    
+    var currentLocation: CLLocation?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+    }
+    
+    //MARK: - Location
+    
+    private func setupLocation() {
+        locationManager.delegate = self
+        if locationManager.authorizationStatus == .denied {
+            // Check for the weather in the default location set
+        } else if locationManager.authorizationStatus == .authorizedWhenInUse || locationManager.authorizationStatus == .authorizedAlways {
+            if CLLocationManager.locationServicesEnabled() {
+                locationManager.startUpdatingLocation()
+            } else {
+                // Check for the weather in the default location set
+            }
+        } else {
+            locationManager.requestWhenInUseAuthorization()
+            locationManager.startUpdatingLocation()
+        }
     }
 
     // MARK: - Table view data source
@@ -38,4 +61,26 @@ class MainTableViewController: UITableViewController {
     }
     */
 
+}
+
+extension MainTableViewController: CLLocationManagerDelegate {
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        if status != .denied && status != .notDetermined && CLLocationManager.locationServicesEnabled(){
+            locationManager.startUpdatingLocation()
+        } else {
+            // Check for the weather in the default location set
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if !locations.isEmpty, currentLocation == nil{
+            currentLocation = locations.first
+            locationManager.stopUpdatingLocation()
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("Error: \(error.localizedDescription)")
+    }
 }
