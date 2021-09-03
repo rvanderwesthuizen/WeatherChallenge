@@ -51,6 +51,8 @@ struct Hourly: Codable {
 struct Daily: Codable {
     let time: Int
     let temp: Temp
+    let sunrise: Int
+    let sunset: Int
     let feelsLike: Feel
     let chanceOfRain: Double
     let weather: [Weather]
@@ -58,6 +60,8 @@ struct Daily: Codable {
     private enum CodingKeys: String, CodingKey {
         case time = "dt"
         case temp = "temp"
+        case sunrise = "sunrise"
+        case sunset = "sunset"
         case feelsLike = "feels_like"
         case chanceOfRain = "pop"
         case weather = "weather"

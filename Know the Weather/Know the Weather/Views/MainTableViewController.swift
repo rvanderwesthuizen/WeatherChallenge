@@ -57,6 +57,7 @@ class MainTableViewController: UITableViewController {
             DispatchQueue.main.async {
                 self.tableView.reloadData()
                 guard let current = self.mainTableViewModel.currentWeather else { return }
+                self.conditionImage.image = self.mainTableViewModel.conditionImage(conditionID: current.weather[0].id, model: current)
                 self.currentTempLabel.text = "\(current.temp)°"
                 self.summaryLabel.text = current.weather[0].description
                 self.mainTableViewModel.currentCity(from: self.currentLocation!, completion: { city in
@@ -64,6 +65,13 @@ class MainTableViewController: UITableViewController {
                     print("\n\(city)\n")
                     self.locationLabel.text = city
                 })
+                if self.mainTableViewModel.dayTimeFlag(time: current.time,
+                                                       sunriseTime: current.sunrise,
+                                                       sunsetTime: current.sunset) {
+                    self.tableView.backgroundView = UIImageView(image: #imageLiteral(resourceName: "DaytimeBackground"))
+                } else {
+                    self.tableView.backgroundView = UIImageView(image: #imageLiteral(resourceName: "NightimeBackground"))
+                }
             }
         }
     }
@@ -103,6 +111,10 @@ class MainTableViewController: UITableViewController {
             return 100
         }
         return 80
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: false)
     }
     
 }

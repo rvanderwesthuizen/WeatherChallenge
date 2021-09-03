@@ -27,7 +27,7 @@ class HourWeatherCollectionViewCell: UICollectionViewCell {
         tempLabel.text = "\(model.temp)°"
         timestampLabel.text = getTimeFromDate(Date(timeIntervalSince1970: Double(model.time)))
         conditionImage.contentMode = .scaleAspectFit
-        conditionImage.image = #imageLiteral(resourceName: "NightimeBackground")
+        conditionImage.image = MainTableViewModel().conditionImage(conditionID: model.weather[0].id, model: model)
     }
     
     private func getTimeFromDate(_ date: Date?) -> String {

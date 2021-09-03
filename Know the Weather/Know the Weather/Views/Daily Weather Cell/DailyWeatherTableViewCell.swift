@@ -32,6 +32,7 @@ class DailyWeatherTableViewCell: UITableViewCell {
         highTempLabel.text = "\(model.temp.max)°"
         lowTempLabel.text = "\(model.temp.min)°"
         dateLabel.text = getDayFromDate(Date(timeIntervalSince1970: Double(model.time)))
+        conditionImage.image = MainTableViewModel().conditionImage(conditionID: model.weather[0].id, model: model)
     }
     
     private func getDayFromDate(_ date: Date?) -> String {
