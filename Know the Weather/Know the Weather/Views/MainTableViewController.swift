@@ -27,6 +27,7 @@ class MainTableViewController: UITableViewController {
         tableView.backgroundView = UIImageView(image: #imageLiteral(resourceName: "DaytimeBackground"))
 
         tableView.register(DailyWeatherTableViewCell.nib(), forCellReuseIdentifier: DailyWeatherTableViewCell.identifier)
+        tableView.register(HourlyWeatherTableViewCell.nib(), forCellReuseIdentifier: HourlyWeatherTableViewCell.identifier)
         setupLocation()
     }
     
@@ -69,22 +70,39 @@ class MainTableViewController: UITableViewController {
 
     // MARK: - Table view data source
     
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        2
+    }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return mainTableViewModel.dailyCount
+        if section == 0 {
+            return 1
+        } else {
+            return mainTableViewModel.dailyCount
+        }
     }
 
     //MARK: - Table view delegate
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: DailyWeatherTableViewCell.identifier, for: indexPath) as! DailyWeatherTableViewCell
-        
-        cell.configure(with: mainTableViewModel.dailyWeather[indexPath.row])
-        
-        return cell
+        if indexPath.section == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: HourlyWeatherTableViewCell.identifier, for: indexPath) as! HourlyWeatherTableViewCell
+            cell.configure(with: mainTableViewModel.hourlyWeather)
+            
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: DailyWeatherTableViewCell.identifier, for: indexPath) as! DailyWeatherTableViewCell
+            cell.configure(with: mainTableViewModel.dailyWeather[indexPath.row])
+            
+            return cell
+        }
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        80
+        if indexPath.section == 0 {
+            return 100
+        }
+        return 80
     }
     
 }

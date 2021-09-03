@@ -18,10 +18,6 @@ class MainTableViewModel {
         dailyWeather.count
     }
     
-    var hourlyCount: Int {
-        hourlyWeather.count
-    }
-    
     private lazy var apiCaller = OpenWeatherMapAPICaller()
     
     func fetchWeather(lat: CLLocationDegrees, lon: CLLocationDegrees, completion: @escaping () -> Void) {
