@@ -72,27 +72,44 @@ class MainTableViewController: UITableViewController {
         guard let location = currentLocation else {
             return
         }
-        mainTableViewModel.fetchWeather(lat: location.coordinate.latitude, lon: location.coordinate.longitude) {
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-                guard let current = self.mainTableViewModel.currentWeather else { return }
-                self.conditionImage.image = UIImage(named: self.mainTableViewModel.conditionImage(conditionID: current.weather[0].id, model: current))
-                self.currentTempLabel.text = "\(current.temp)°"
-                self.summaryLabel.text = current.weather[0].description
-                self.mainTableViewModel.currentCity(from: self.currentLocation!, completion: { city in
-                    self.locationLabel.text = city
-                })
-                if self.mainTableViewModel.dayTimeFlag(time: current.time,
-                                                       sunriseTime: current.sunrise,
-                                                       sunsetTime: current.sunset) {
-                    self.tableView.backgroundView = UIImageView(image: #imageLiteral(resourceName: "DaytimeBackground"))
-                } else {
-                    self.tableView.backgroundView = UIImageView(image: #imageLiteral(resourceName: "NightimeBackground"))
+        mainTableViewModel.fetchWeather(lat: location.coordinate.latitude, lon: location.coordinate.longitude) { result in
+            switch result {
+            case .failure(let error):
+                self.displayErrorAlert("An error happened when fetching weather: \(error)")
+            case .success(_):
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                    guard let current = self.mainTableViewModel.currentWeather else { return }
+                    self.conditionImage.image = UIImage(named: self.mainTableViewModel.conditionImage(conditionID: current.weather[0].id, model: current))
+                    self.currentTempLabel.text = "\(current.temp)°"
+                    self.summaryLabel.text = current.weather[0].description
+                    self.mainTableViewModel.currentCity(from: self.currentLocation!, completion: { result in
+                        switch result {
+                        case .success(let city):
+                            self.locationLabel.text = city
+                        case .failure(let error):
+                            self.displayErrorAlert("An error happened when trying to retrieve the location's name: \(error)")
+                        }
+                    })
+                    if self.mainTableViewModel.dayTimeFlag(time: current.time,
+                                                           sunriseTime: current.sunrise,
+                                                           sunsetTime: current.sunset) {
+                        self.tableView.backgroundView = UIImageView(image: #imageLiteral(resourceName: "DaytimeBackground"))
+                    } else {
+                        self.tableView.backgroundView = UIImageView(image: #imageLiteral(resourceName: "NightimeBackground"))
+                    }
+                    self.activityIndicator.stopAnimating()
+                    self.tableView.refreshControl?.endRefreshing()
                 }
-                self.activityIndicator.stopAnimating()
-                self.tableView.refreshControl?.endRefreshing()
             }
         }
+    }
+    
+    private func displayErrorAlert(_ errorString: String){
+        let alertController = UIAlertController(title: "Error", message: errorString, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        
+        present(alertController, animated: true)
     }
 
     // MARK: - Table view data source

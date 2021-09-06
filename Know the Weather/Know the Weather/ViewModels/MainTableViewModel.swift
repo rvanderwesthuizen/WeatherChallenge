@@ -30,26 +30,27 @@ class MainTableViewModel {
     
     private lazy var apiCaller = OpenWeatherMapAPICaller()
     
-    func fetchWeather(lat: CLLocationDegrees, lon: CLLocationDegrees, completion: @escaping () -> Void) {
+    func fetchWeather(lat: CLLocationDegrees, lon: CLLocationDegrees, completion: @escaping (Result<WeatherData, Error>) -> Void) {
         apiCaller.fetchWeather(lat: lat, lon: lon) { result in
             switch result {
-            case .failure(let error): print(error)
+            case .failure(let error):
+                completion(.failure(error))
             case .success(let data):
                 self.currentWeather = data.current
                 self.dailyWeather = data.daily
                 self.hourlyWeather = data.hourly
-                completion()
+    completion(.success(data))
             }
         }
     }
     
-    func currentCity(from location: CLLocation, completion: @escaping (String) -> Void) {
+    func currentCity(from location: CLLocation, completion: @escaping (Result<String,Error>) -> Void) {
         CLGeocoder().reverseGeocodeLocation(location) { placemarks, error in
             if error == nil {
                 guard let city = placemarks?.first?.locality else { return }
-                completion(city)
+                completion(.success(city))
             } else {
-                print(error!)
+                completion(.failure(error!))
             }
         }
     }
