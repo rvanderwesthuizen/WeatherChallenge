@@ -10,29 +10,44 @@ import CoreLocation
 
 class LocationsTableViewController: UITableViewController {
     var completion: ((CLLocation) -> Void)?
+    private lazy var locationTableViewModel = LocationsTableViewModel()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "Previous Locations"
         
+        tableView.backgroundView = UIImageView(image: #imageLiteral(resourceName: "DaytimeBackground"))
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
     }
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
+    func checkIfLocationIsInList(location: CLLocation) {
+        locationTableViewModel.checkIfLocationIsInList(location: location) { result in
+            switch result{
+            case .success(let bool):
+            if bool {
+                
+            }
+            case .failure(let error):
+                self.displayErrorAlert("An error happened while checking if the location exists: \(error)")
+            }
+        }
+    }
+    
+    private func displayErrorAlert(_ errorString: String){
+        let alertController = UIAlertController(title: "Error", message: errorString, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        
+        present(alertController, animated: true)
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
+        return locationTableViewModel.counts
     }
 
-    /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        cell.textLabel?.text = locationTableViewModel.locations[indexPath.row].cityName
         return cell
     }
-    */
 
 }

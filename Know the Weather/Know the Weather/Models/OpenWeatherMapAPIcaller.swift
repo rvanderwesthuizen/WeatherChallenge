@@ -14,7 +14,6 @@ struct OpenWeatherMapAPICaller {
     
     func fetchWeather(lat: CLLocationDegrees, lon: CLLocationDegrees, completion: @escaping (Result<WeatherData, Error>) -> Void) {
         let urlString = "\(weatherURL)&lat=\(lat)&lon=\(lon)"
-        print("\n\(urlString)\n")
         
         guard let url = URL(string: urlString) else { return }
         

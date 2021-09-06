@@ -12,7 +12,7 @@ class MainTableViewController: UITableViewController {
     private let mainTableViewModel = MainTableViewModel()
     let locationManager = CLLocationManager()
     
-    var currentLocation: CLLocation?
+    var currentSelectedLocation: CLLocation?
     
     @IBOutlet private weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet private weak var locationLabel: UILabel!
@@ -37,8 +37,9 @@ class MainTableViewController: UITableViewController {
     
     @IBAction func didTapOtherLocationsButton(_ sender: UIButton) {
         let locationsVC = LocationsTableViewController()
+        locationsVC.checkIfLocationIsInList(location: currentSelectedLocation!)
         locationsVC.completion = { location in
-            self.currentLocation = location
+            self.currentSelectedLocation = location
             self.requestWeatherForLocation()
         }
         let navVC = UINavigationController(rootViewController: locationsVC)
@@ -69,7 +70,7 @@ class MainTableViewController: UITableViewController {
     }
     
     @objc private func requestWeatherForLocation(){
-        guard let location = currentLocation else {
+        guard let location = currentSelectedLocation else {
             return
         }
         mainTableViewModel.fetchWeather(lat: location.coordinate.latitude, lon: location.coordinate.longitude) { result in
@@ -83,7 +84,7 @@ class MainTableViewController: UITableViewController {
                     self.conditionImage.image = UIImage(named: self.mainTableViewModel.conditionImage(conditionID: current.weather[0].id, model: current))
                     self.currentTempLabel.text = "\(current.temp)°"
                     self.summaryLabel.text = current.weather[0].description
-                    self.mainTableViewModel.currentCity(from: self.currentLocation!, completion: { result in
+                    self.mainTableViewModel.currentCity(from: self.currentSelectedLocation!, completion: { result in
                         switch result {
                         case .success(let city):
                             self.locationLabel.text = city
@@ -166,9 +167,8 @@ extension MainTableViewController: CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if !locations.isEmpty, currentLocation == nil{
-            print("\n\(locations)\n")
-            currentLocation = locations.first
+        if !locations.isEmpty, currentSelectedLocation == nil{
+            currentSelectedLocation = locations.first
             locationManager.stopUpdatingLocation()
             requestWeatherForLocation()
         }
