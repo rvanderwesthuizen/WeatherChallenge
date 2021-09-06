@@ -23,6 +23,9 @@ class MainTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        mainTableViewModel.setDefaultLocation(location: CLLocation(latitude: +37.33233141, longitude: -122.03121860))
+        
         activateActivityIndicator()
         
         tableView.backgroundView = UIImageView(image: #imageLiteral(resourceName: "DaytimeBackground"))

@@ -14,6 +14,7 @@ class MainTableViewModel {
     var currentWeather: Current?
     var dailyWeather = [Daily]()
     var hourlyWeather = [Hourly]()
+    var locations = [Location]()
     
     var dailyCount: Int {
         dailyWeather.count
@@ -42,6 +43,19 @@ class MainTableViewModel {
         }
     }
     
+    func setDefaultLocation(location: CLLocation) {
+        locations.append(Location(lat: location.coordinate.latitude, lon: location.coordinate.longitude, cityName: "Cupertino(Apple)"))
+        plistHandler.getLocationsFormPlist { result in
+            switch result {
+            case .success(let locations):
+                self.locations = locations
+            case .failure(let error):
+                print(error)
+            }
+        }
+        plistHandler.writeToPlist(locations: [Location(lat: location.coordinate.latitude, lon: location.coordinate.longitude, cityName: "Cupertino(Apple)")])
+    }
+    
     func fetchWeather(lat: CLLocationDegrees, lon: CLLocationDegrees, completion: @escaping (Result<WeatherData, Error>) -> Void) {
         apiCaller.fetchWeather(lat: lat, lon: lon) { result in
             switch result {
@@ -51,7 +65,7 @@ class MainTableViewModel {
                 self.currentWeather = data.current
                 self.dailyWeather = data.daily
                 self.hourlyWeather = data.hourly
-    completion(.success(data))
+                completion(.success(data))
             }
         }
     }

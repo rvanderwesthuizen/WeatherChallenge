@@ -24,11 +24,7 @@ class LocationsTableViewController: UITableViewController {
         locationTableViewModel.checkIfLocationIsInList(location: location) { result in
             switch result{
             case .success(let bool):
-            if bool {
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
-            }
+            if !bool {
                 self.locationTableViewModel.addLocation(from: location) { result in
                     switch result{
                     case .success(_):
@@ -37,6 +33,10 @@ class LocationsTableViewController: UITableViewController {
                         self.displayErrorAlert("An error happened while trying to retrieve the location's name: \(error)")
                     }
                 }
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            }
             case .failure(let error):
                 self.displayErrorAlert("An error happened while checking if the location exists: \(error)")
             }
