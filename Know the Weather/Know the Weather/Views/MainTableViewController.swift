@@ -57,7 +57,7 @@ class MainTableViewController: UITableViewController {
             DispatchQueue.main.async {
                 self.tableView.reloadData()
                 guard let current = self.mainTableViewModel.currentWeather else { return }
-                self.conditionImage.image = self.mainTableViewModel.conditionImage(conditionID: current.weather[0].id, model: current)
+                self.conditionImage.image = UIImage(named: self.mainTableViewModel.conditionImage(conditionID: current.weather[0].id, model: current))
                 self.currentTempLabel.text = "\(current.temp)°"
                 self.summaryLabel.text = current.weather[0].description
                 self.mainTableViewModel.currentCity(from: self.currentLocation!, completion: { city in

@@ -48,13 +48,26 @@
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qIt-Mw-vuK">
+                                    <rect key="frame" x="345" y="10" width="20" height="20"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="20" id="fbt-ud-4Bn"/>
+                                        <constraint firstAttribute="height" constant="20" id="pxW-g0-LdA"/>
+                                    </constraints>
+                                    <color key="tintColor" systemColor="labelColor"/>
+                                    <state key="normal" image="ellipsis" catalog="system">
+                                        <color key="titleColor" systemColor="labelColor"/>
+                                    </state>
+                                </button>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
+                                <constraint firstItem="qIt-Mw-vuK" firstAttribute="top" secondItem="kAo-Cb-QP8" secondAttribute="top" constant="10" id="3e9-4g-ZU9"/>
                                 <constraint firstItem="uiE-em-rj3" firstAttribute="centerX" secondItem="kAo-Cb-QP8" secondAttribute="centerX" id="69c-KW-QZe"/>
                                 <constraint firstItem="V1n-cb-46F" firstAttribute="top" secondItem="kAo-Cb-QP8" secondAttribute="top" constant="10" id="ADV-hf-F9B"/>
                                 <constraint firstAttribute="trailing" secondItem="1gw-0y-AgV" secondAttribute="trailing" constant="10" id="Dlr-mu-XXV"/>
                                 <constraint firstItem="EpA-ly-5Ij" firstAttribute="top" secondItem="1gw-0y-AgV" secondAttribute="bottom" id="EDh-Ii-sY7"/>
+                                <constraint firstAttribute="trailing" secondItem="qIt-Mw-vuK" secondAttribute="trailing" constant="10" id="Nhr-7W-ff7"/>
                                 <constraint firstAttribute="trailing" secondItem="V1n-cb-46F" secondAttribute="trailing" constant="10" id="RIk-2H-G1h"/>
                                 <constraint firstItem="1gw-0y-AgV" firstAttribute="leading" secondItem="kAo-Cb-QP8" secondAttribute="leading" constant="10" id="W5I-jc-eRP"/>
                                 <constraint firstItem="V1n-cb-46F" firstAttribute="leading" secondItem="kAo-Cb-QP8" secondAttribute="leading" constant="10" id="Yvj-C0-Saa"/>
@@ -78,11 +91,15 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="P2e-8r-pfZ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-100" y="77.58620689655173"/>
+            <point key="canvasLocation" x="156" y="-96.059113300492612"/>
         </scene>
     </scenes>
     <resources>
+        <image name="ellipsis" catalog="system" width="128" height="37"/>
         <image name="sun.max.fill" catalog="system" width="128" height="124"/>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

@@ -61,103 +61,38 @@ class MainTableViewModel {
         return false
     }
     
-    func conditionImage(conditionID: Int, model: Current) -> UIImage{
+    func conditionImage(conditionID: Int, model: Current) -> String{
         let imageNamePrefix = "weezle_"
         
         switch conditionID {
         case 200...232:
-            return UIImage(named: "\(imageNamePrefix)cloud_thunder_rain")!
+            return "\(imageNamePrefix)cloud_thunder_rain"
         case 300...321:
-            return UIImage(named: "\(imageNamePrefix)medium_rain")!
+            return "\(imageNamePrefix)medium_rain"
         case 500...531:
-            return UIImage(named: "\(imageNamePrefix)rain")!
+            return "\(imageNamePrefix)rain"
         case 600...622:
-            return UIImage(named: "\(imageNamePrefix)snow")!
+            return "\(imageNamePrefix)snow"
         case 701...781:
-            return UIImage(named: "\(imageNamePrefix)fog")!
+            return "\(imageNamePrefix)fog"
         case 800:
             if !dayTimeFlag(time: model.time, sunriseTime: model.sunrise, sunsetTime: model.sunset) {
-                return UIImage(named: "\(imageNamePrefix)fullmoon")!
+                return "\(imageNamePrefix)fullmoon"
             }
-            return UIImage(named: "\(imageNamePrefix)sun")!
+            return "\(imageNamePrefix)sun"
         case 801:
             if !dayTimeFlag(time: model.time, sunriseTime: model.sunrise, sunsetTime: model.sunset) {
-                return UIImage(named: "\(imageNamePrefix)moon_cloud")!
+                return "\(imageNamePrefix)moon_cloud"
             }
-            return UIImage(named: "\(imageNamePrefix)cloud_sun")!
+            return "\(imageNamePrefix)cloud_sun"
         case 802:
-            return UIImage(named: "\(imageNamePrefix)cloud")!
+            return "\(imageNamePrefix)cloud"
         case 803:
-            return UIImage(named: "\(imageNamePrefix)max_cloud")!
+            return "\(imageNamePrefix)max_cloud"
         case 804:
-            return UIImage(named: "\(imageNamePrefix)overcast")!
+            return "\(imageNamePrefix)overcast"
         default:
-            return UIImage(named: "\(imageNamePrefix)sun")!
-        }
-    }
-    
-    func conditionImage(conditionID: Int, model _: Daily) -> UIImage{
-        let imageNamePrefix = "weezle_"
-        
-        switch conditionID {
-        case 200...232:
-            return UIImage(named: "\(imageNamePrefix)cloud_thunder_rain")!
-        case 300...321:
-            return UIImage(named: "\(imageNamePrefix)medium_rain")!
-        case 500...531:
-            return UIImage(named: "\(imageNamePrefix)rain")!
-        case 600...622:
-            return UIImage(named: "\(imageNamePrefix)snow")!
-        case 701...781:
-            return UIImage(named: "\(imageNamePrefix)fog")!
-        case 800:
-            return UIImage(named: "\(imageNamePrefix)sun")!
-        case 801:
-            return UIImage(named: "\(imageNamePrefix)cloud_sun")!
-        case 802:
-            return UIImage(named: "\(imageNamePrefix)cloud")!
-        case 803:
-            return UIImage(named: "\(imageNamePrefix)max_cloud")!
-        case 804:
-            return UIImage(named: "\(imageNamePrefix)overcast")!
-        default:
-            return UIImage(named: "\(imageNamePrefix)sun")!
-        }
-    }
-    
-    func conditionImage(conditionID: Int, model: Hourly) -> UIImage{
-        #warning("Images not displaying based on time, always displays as day")
-        let imageNamePrefix = "weezle_"
-        
-        switch conditionID {
-        case 200...232:
-            return UIImage(named: "\(imageNamePrefix)cloud_thunder_rain")!
-        case 300...321:
-            return UIImage(named: "\(imageNamePrefix)medium_rain")!
-        case 500...531:
-            return UIImage(named: "\(imageNamePrefix)rain")!
-        case 600...622:
-            return UIImage(named: "\(imageNamePrefix)snow")!
-        case 701...781:
-            return UIImage(named: "\(imageNamePrefix)fog")!
-        case 800:
-            if dayTimeFlag(time: model.time, sunriseTime: currentDaySunrise, sunsetTime: currentDaySunset) {
-                return UIImage(named: "\(imageNamePrefix)fullmoon")!
-            }
-            return UIImage(named: "\(imageNamePrefix)sun")!
-        case 801:
-            if dayTimeFlag(time: model.time, sunriseTime: currentDaySunrise, sunsetTime: currentDaySunset) {
-                return UIImage(named: "\(imageNamePrefix)moon_cloud")!
-            }
-            return UIImage(named: "\(imageNamePrefix)cloud_sun")!
-        case 802:
-            return UIImage(named: "\(imageNamePrefix)cloud")!
-        case 803:
-            return UIImage(named: "\(imageNamePrefix)max_cloud")!
-        case 804:
-            return UIImage(named: "\(imageNamePrefix)overcast")!
-        default:
-            return UIImage(named: "\(imageNamePrefix)sun")!
+            return "\(imageNamePrefix)sun"
         }
     }
 }
