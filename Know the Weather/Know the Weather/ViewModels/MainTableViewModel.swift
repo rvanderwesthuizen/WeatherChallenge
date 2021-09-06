@@ -10,6 +10,7 @@ import CoreLocation
 import MapKit
 
 class MainTableViewModel {
+    private var plistHandler = PlistHandler()
     var currentWeather: Current?
     var dailyWeather = [Daily]()
     var hourlyWeather = [Hourly]()

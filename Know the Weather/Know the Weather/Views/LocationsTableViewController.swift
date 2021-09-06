@@ -25,8 +25,18 @@ class LocationsTableViewController: UITableViewController {
             switch result{
             case .success(let bool):
             if bool {
-                
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
             }
+                self.locationTableViewModel.addLocation(from: location) { result in
+                    switch result{
+                    case .success(_):
+                        print()
+                    case .failure(let error):
+                        self.displayErrorAlert("An error happened while trying to retrieve the location's name: \(error)")
+                    }
+                }
             case .failure(let error):
                 self.displayErrorAlert("An error happened while checking if the location exists: \(error)")
             }
@@ -46,7 +56,9 @@ class LocationsTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        
         cell.textLabel?.text = locationTableViewModel.locations[indexPath.row].cityName
+        
         return cell
     }
 
