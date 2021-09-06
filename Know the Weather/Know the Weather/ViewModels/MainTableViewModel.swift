@@ -31,6 +31,17 @@ class MainTableViewModel {
     
     private lazy var apiCaller = OpenWeatherMapAPICaller()
     
+    func fetchLastKnownLocation(completion: @escaping (Result<Location, Error>) -> Void) {
+        plistHandler.getLocationsFormPlist { result in
+            switch result {
+            case .success(let locations):
+                completion(.success(locations.first!))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
     func fetchWeather(lat: CLLocationDegrees, lon: CLLocationDegrees, completion: @escaping (Result<WeatherData, Error>) -> Void) {
         apiCaller.fetchWeather(lat: lat, lon: lon) { result in
             switch result {

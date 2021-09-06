@@ -35,6 +35,10 @@ class MainTableViewController: UITableViewController {
         tableView.refreshControl?.addTarget(self, action: #selector(requestWeatherForLocation), for: .valueChanged)
     }
     
+    @IBAction func didTapLocationButton(_ sender: UIButton) {
+        setupLocation()
+    }
+    
     @IBAction func didTapOtherLocationsButton(_ sender: UIButton) {
         let locationsVC = LocationsTableViewController()
         locationsVC.checkIfLocationIsInList(location: currentSelectedLocation!)
@@ -51,12 +55,28 @@ class MainTableViewController: UITableViewController {
     private func setupLocation() {
         locationManager.delegate = self
         if locationManager.authorizationStatus == .denied {
-            // Check for the weather in the default location set
+            mainTableViewModel.fetchLastKnownLocation() { result in
+                switch result {
+                case .success(let location):
+                    self.currentSelectedLocation = CLLocation(latitude: location.lat, longitude: location.lon)
+                    self.requestWeatherForLocation()
+                case .failure(let error):
+                    self.displayErrorAlert("There was an error loading a default location: \(error)")
+                }
+            }
         } else if locationManager.authorizationStatus == .authorizedWhenInUse || locationManager.authorizationStatus == .authorizedAlways {
             if CLLocationManager.locationServicesEnabled() {
                 locationManager.startUpdatingLocation()
             } else {
-                // Check for the weather in the default location set
+                mainTableViewModel.fetchLastKnownLocation() { result in
+                    switch result {
+                    case .success(let location):
+                        self.currentSelectedLocation = CLLocation(latitude: location.lat, longitude: location.lon)
+                        self.requestWeatherForLocation()
+                    case .failure(let error):
+                        self.displayErrorAlert("There was an error loading a default location: \(error)")
+                    }
+                }
             }
         } else {
             locationManager.requestWhenInUseAuthorization()
@@ -162,7 +182,15 @@ extension MainTableViewController: CLLocationManagerDelegate {
         if status != .denied && status != .notDetermined && CLLocationManager.locationServicesEnabled(){
             locationManager.startUpdatingLocation()
         } else {
-            // Check for the weather in the default location set
+            mainTableViewModel.fetchLastKnownLocation() { result in
+                switch result {
+                case .success(let location):
+                    self.currentSelectedLocation = CLLocation(latitude: location.lat, longitude: location.lon)
+                    self.requestWeatherForLocation()
+                case .failure(let error):
+                    self.displayErrorAlert("There was an error loading a default location: \(error)")
+                }
+            }
         }
     }
     

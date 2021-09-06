@@ -62,6 +62,18 @@
                                         <action selector="didTapOtherLocationsButton:" destination="PYo-Jc-Fa3" eventType="touchUpInside" id="5hK-mV-ctQ"/>
                                     </connections>
                                 </button>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1jW-gH-gTr">
+                                    <rect key="frame" x="10" y="10" width="20" height="20"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="20" id="bcF-mz-saL"/>
+                                        <constraint firstAttribute="height" constant="20" id="lIK-5q-fD6"/>
+                                    </constraints>
+                                    <color key="tintColor" systemColor="labelColor"/>
+                                    <state key="normal" image="location.circle.fill" catalog="system"/>
+                                    <connections>
+                                        <action selector="didTapLocationButton:" destination="PYo-Jc-Fa3" eventType="touchUpInside" id="Laf-q7-eKE"/>
+                                    </connections>
+                                </button>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
@@ -70,11 +82,13 @@
                                 <constraint firstItem="V1n-cb-46F" firstAttribute="top" secondItem="kAo-Cb-QP8" secondAttribute="top" constant="10" id="ADV-hf-F9B"/>
                                 <constraint firstAttribute="trailing" secondItem="1gw-0y-AgV" secondAttribute="trailing" constant="10" id="Dlr-mu-XXV"/>
                                 <constraint firstItem="EpA-ly-5Ij" firstAttribute="top" secondItem="1gw-0y-AgV" secondAttribute="bottom" id="EDh-Ii-sY7"/>
+                                <constraint firstItem="1jW-gH-gTr" firstAttribute="top" secondItem="kAo-Cb-QP8" secondAttribute="top" constant="10" id="Ipa-Yx-U7p"/>
                                 <constraint firstAttribute="trailing" secondItem="qIt-Mw-vuK" secondAttribute="trailing" constant="10" id="Nhr-7W-ff7"/>
                                 <constraint firstAttribute="trailing" secondItem="V1n-cb-46F" secondAttribute="trailing" constant="10" id="RIk-2H-G1h"/>
                                 <constraint firstItem="1gw-0y-AgV" firstAttribute="leading" secondItem="kAo-Cb-QP8" secondAttribute="leading" constant="10" id="W5I-jc-eRP"/>
                                 <constraint firstItem="V1n-cb-46F" firstAttribute="leading" secondItem="kAo-Cb-QP8" secondAttribute="leading" constant="10" id="Yvj-C0-Saa"/>
                                 <constraint firstItem="uiE-em-rj3" firstAttribute="top" secondItem="V1n-cb-46F" secondAttribute="bottom" constant="20" id="dJP-8d-JsT"/>
+                                <constraint firstItem="1jW-gH-gTr" firstAttribute="leading" secondItem="kAo-Cb-QP8" secondAttribute="leading" constant="10" id="fKi-fn-Qu0"/>
                                 <constraint firstItem="EpA-ly-5Ij" firstAttribute="leading" secondItem="kAo-Cb-QP8" secondAttribute="leading" constant="10" id="qUn-9v-yez"/>
                                 <constraint firstItem="1gw-0y-AgV" firstAttribute="top" secondItem="uiE-em-rj3" secondAttribute="bottom" constant="10" id="srZ-Ad-c8h"/>
                                 <constraint firstAttribute="trailing" secondItem="EpA-ly-5Ij" secondAttribute="trailing" constant="10" id="wrf-mV-ZF9"/>
@@ -105,6 +119,7 @@
     </scenes>
     <resources>
         <image name="ellipsis" catalog="system" width="128" height="37"/>
+        <image name="location.circle.fill" catalog="system" width="128" height="121"/>
         <image name="weezle_sun" width="256" height="256"/>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
