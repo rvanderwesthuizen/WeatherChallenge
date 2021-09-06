@@ -13,22 +13,36 @@ class MainTableViewController: UITableViewController {
     let locationManager = CLLocationManager()
     
     var currentLocation: CLLocation?
-
     
+    @IBOutlet private weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet private weak var locationLabel: UILabel!
     @IBOutlet private weak var conditionImage: UIImageView!
     @IBOutlet private weak var currentTempLabel: UILabel!
     @IBOutlet private weak var summaryLabel: UILabel!
-    
+    @IBOutlet private weak var otherLocationsButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        activateActivityIndicator()
         
         tableView.backgroundView = UIImageView(image: #imageLiteral(resourceName: "DaytimeBackground"))
 
         tableView.register(DailyWeatherTableViewCell.nib(), forCellReuseIdentifier: DailyWeatherTableViewCell.identifier)
         tableView.register(HourlyWeatherTableViewCell.nib(), forCellReuseIdentifier: HourlyWeatherTableViewCell.identifier)
         setupLocation()
+        
+        tableView.refreshControl = UIRefreshControl()
+        tableView.refreshControl?.addTarget(self, action: #selector(requestWeatherForLocation), for: .valueChanged)
+    }
+    
+    @IBAction func didTapOtherLocationsButton(_ sender: UIButton) {
+        let locationsVC = LocationsTableViewController()
+        locationsVC.completion = { location in
+            self.currentLocation = location
+            self.requestWeatherForLocation()
+        }
+        let navVC = UINavigationController(rootViewController: locationsVC)
+        present(navVC, animated: true)
     }
     
     //MARK: - Location
@@ -49,7 +63,12 @@ class MainTableViewController: UITableViewController {
         }
     }
     
-    private func requestWeatherForLocation(){
+    private func activateActivityIndicator() {
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.startAnimating()
+    }
+    
+    @objc private func requestWeatherForLocation(){
         guard let location = currentLocation else {
             return
         }
@@ -61,8 +80,6 @@ class MainTableViewController: UITableViewController {
                 self.currentTempLabel.text = "\(current.temp)°"
                 self.summaryLabel.text = current.weather[0].description
                 self.mainTableViewModel.currentCity(from: self.currentLocation!, completion: { city in
-                    print("\n\(self.currentLocation!)\n")
-                    print("\n\(city)\n")
                     self.locationLabel.text = city
                 })
                 if self.mainTableViewModel.dayTimeFlag(time: current.time,
@@ -72,6 +89,8 @@ class MainTableViewController: UITableViewController {
                 } else {
                     self.tableView.backgroundView = UIImageView(image: #imageLiteral(resourceName: "NightimeBackground"))
                 }
+                self.activityIndicator.stopAnimating()
+                self.tableView.refreshControl?.endRefreshing()
             }
         }
     }

@@ -9,7 +9,7 @@ import Foundation
 
 class HourWeatherCollectionViewCellModel {
     
-    func conditionImage(conditionID: Int, model: Hourly) -> String{
+    func conditionImage(conditionID: Int) -> String{
         let imageNamePrefix = "weezle_"
         
         switch conditionID {
@@ -24,14 +24,8 @@ class HourWeatherCollectionViewCellModel {
         case 701...781:
             return "\(imageNamePrefix)fog"
         case 800:
-//            if model.time {
-//                return "\(imageNamePrefix)fullmoon"
-//            }
             return "\(imageNamePrefix)sun"
         case 801:
-//            if model.time {
-//                return "\(imageNamePrefix)moon_cloud"
-//            }
             return "\(imageNamePrefix)cloud_sun"
         case 802:
             return "\(imageNamePrefix)cloud"

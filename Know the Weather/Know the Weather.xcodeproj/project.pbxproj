@@ -26,6 +26,9 @@
 		C986444B26E1F43F00CEA8FE /* HourWeatherCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C986444926E1F43F00CEA8FE /* HourWeatherCollectionViewCell.xib */; };
 		C986444D26E5E5A900CEA8FE /* DailyWeatherTableViewCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C986444C26E5E5A900CEA8FE /* DailyWeatherTableViewCellModel.swift */; };
 		C986445126E5E92500CEA8FE /* HourWeatherCollectionViewCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C986445026E5E92500CEA8FE /* HourWeatherCollectionViewCellModel.swift */; };
+		C986445326E6015A00CEA8FE /* LocationsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C986445226E6015A00CEA8FE /* LocationsTableViewController.swift */; };
+		C986445526E6061200CEA8FE /* LocationsTableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C986445426E6061200CEA8FE /* LocationsTableViewModel.swift */; };
+		C986445726E6075D00CEA8FE /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C986445626E6075D00CEA8FE /* Constants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +74,9 @@
 		C986444926E1F43F00CEA8FE /* HourWeatherCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HourWeatherCollectionViewCell.xib; sourceTree = "<group>"; };
 		C986444C26E5E5A900CEA8FE /* DailyWeatherTableViewCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyWeatherTableViewCellModel.swift; sourceTree = "<group>"; };
 		C986445026E5E92500CEA8FE /* HourWeatherCollectionViewCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourWeatherCollectionViewCellModel.swift; sourceTree = "<group>"; };
+		C986445226E6015A00CEA8FE /* LocationsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsTableViewController.swift; sourceTree = "<group>"; };
+		C986445426E6061200CEA8FE /* LocationsTableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsTableViewModel.swift; sourceTree = "<group>"; };
+		C986445626E6075D00CEA8FE /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -156,6 +162,7 @@
 				C986443526E0BB7400CEA8FE /* MainTableViewModel.swift */,
 				C986444C26E5E5A900CEA8FE /* DailyWeatherTableViewCellModel.swift */,
 				C986445026E5E92500CEA8FE /* HourWeatherCollectionViewCellModel.swift */,
+				C986445426E6061200CEA8FE /* LocationsTableViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -165,6 +172,7 @@
 			children = (
 				C96F481826D90F6A005553EE /* OpenWeatherMapAPIcaller.swift */,
 				C986443326DE114D00CEA8FE /* WeatherData.swift */,
+				C986445626E6075D00CEA8FE /* Constants.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -178,6 +186,7 @@
 				C96F47EC26D8F0DA005553EE /* LaunchScreen.storyboard */,
 				C96F47E726D8F0D7005553EE /* Main.storyboard */,
 				C96F481126D8F283005553EE /* MainTableViewController.swift */,
+				C986445226E6015A00CEA8FE /* LocationsTableViewController.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -343,6 +352,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C96F47E226D8F0D7005553EE /* AppDelegate.swift in Sources */,
+				C986445526E6061200CEA8FE /* LocationsTableViewModel.swift in Sources */,
 				C96F481226D8F283005553EE /* MainTableViewController.swift in Sources */,
 				C986444326E1F19600CEA8FE /* HourlyWeatherTableViewCell.swift in Sources */,
 				C96F481926D90F6A005553EE /* OpenWeatherMapAPIcaller.swift in Sources */,
@@ -350,7 +360,9 @@
 				C986443626E0BB7400CEA8FE /* MainTableViewModel.swift in Sources */,
 				C986444D26E5E5A900CEA8FE /* DailyWeatherTableViewCellModel.swift in Sources */,
 				C986444A26E1F43F00CEA8FE /* HourWeatherCollectionViewCell.swift in Sources */,
+				C986445326E6015A00CEA8FE /* LocationsTableViewController.swift in Sources */,
 				C986445126E5E92500CEA8FE /* HourWeatherCollectionViewCellModel.swift in Sources */,
+				C986445726E6075D00CEA8FE /* Constants.swift in Sources */,
 				C986443E26E0C0D300CEA8FE /* DailyWeatherTableViewCell.swift in Sources */,
 				C986443426DE114D00CEA8FE /* WeatherData.swift in Sources */,
 			);

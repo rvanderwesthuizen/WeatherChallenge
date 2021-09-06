@@ -29,7 +29,7 @@ class HourWeatherCollectionViewCell: UICollectionViewCell {
         tempLabel.text = "\(model.temp)°"
         timestampLabel.text = hourWeatherCollectionViewCellModel.getTimeFromDate(Date(timeIntervalSince1970: Double(model.time)))
         conditionImage.contentMode = .scaleAspectFit
-        conditionImage.image = UIImage(named: hourWeatherCollectionViewCellModel.conditionImage(conditionID: model.weather[0].id, model: model))
+        conditionImage.image = UIImage(named: hourWeatherCollectionViewCellModel.conditionImage(conditionID: model.weather[0].id))
     }
 
 }
