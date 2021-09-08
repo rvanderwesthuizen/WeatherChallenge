@@ -14,6 +14,7 @@ class MainTableViewController: UITableViewController {
     
     var currentSelectedLocation: CLLocation?
     
+    @IBOutlet private weak var currentWeatherView: UIView!
     @IBOutlet private weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet private weak var locationLabel: UILabel!
     @IBOutlet private weak var conditionImage: UIImageView!
@@ -23,6 +24,9 @@ class MainTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(didTapCurrentWeather))
+        currentWeatherView.addGestureRecognizer(tap)
         
         mainTableViewModel.setDefaultLocation(location: CLLocation(latitude: +37.33233141, longitude: -122.03121860))
         
@@ -36,6 +40,22 @@ class MainTableViewController: UITableViewController {
         
         tableView.refreshControl = UIRefreshControl()
         tableView.refreshControl?.addTarget(self, action: #selector(requestWeatherForLocation), for: .valueChanged)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super .viewWillAppear(animated)
+        navigationController?.isNavigationBarHidden = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super .viewWillDisappear(animated)
+        navigationController?.isNavigationBarHidden = false
+    }
+    
+    @objc private func didTapCurrentWeather() {
+        if let currentWeatherDetailTVC = storyboard?.instantiateViewController(identifier: "CurrentWeatherDetail") as? CurrentWeatherDetailsTableViewController {
+            navigationController?.pushViewController(currentWeatherDetailTVC, animated: true)
+        }
     }
     
     @IBAction func didTapLocationButton(_ sender: UIButton) {
