@@ -13,7 +13,7 @@ class HourWeatherCollectionViewCell: UICollectionViewCell {
     @IBOutlet private weak var timestampLabel: UILabel!
     @IBOutlet private weak var conditionImage: UIImageView!
     
-    private let hourWeatherCollectionViewCellModel = HourWeatherCollectionViewCellModel()
+    private let viewModel = HourWeatherCollectionViewCellModel()
     
     static let identifier = "HourWeatherCollectionViewCell"
     
@@ -27,9 +27,9 @@ class HourWeatherCollectionViewCell: UICollectionViewCell {
     
     func configure(with model: Hourly) {
         tempLabel.text = "\(model.temp)°"
-        timestampLabel.text = hourWeatherCollectionViewCellModel.getTimeFromDate(Date(timeIntervalSince1970: Double(model.time)))
+        timestampLabel.text = viewModel.getTimeFromDate(Date(timeIntervalSince1970: Double(model.time)))
         conditionImage.contentMode = .scaleAspectFit
-        conditionImage.image = UIImage(named: hourWeatherCollectionViewCellModel.conditionImage(conditionID: model.weather[0].id))
+        conditionImage.image = UIImage(named: viewModel.conditionImage(conditionID: model.weather[0].id))
     }
 
 }

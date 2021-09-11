@@ -9,28 +9,35 @@ import Foundation
 import CoreLocation
 import MapKit
 
-class MainTableViewModel {
-    private var plistHandler = PlistHandler()
+class MainTableViewModel: NSObject {
+    private lazy var plistHandler = PlistHandler()
+    private lazy var service = OpenWeatherMapService()
+    private let locationManager = CLLocationManager()
+    private var locations = [Location]()
+    
+    var didFetchWeather: ((WeatherData) -> Void)?
+    var didFailWithError: ((Error) -> Void)?
     var currentWeather: Current?
     var dailyWeather = [Daily]()
     var hourlyWeather = [Hourly]()
-    var locations = [Location]()
+    var currentSelectedLocation: CLLocation?
     
     var dailyCount: Int {
         dailyWeather.count
     }
     
     var currentDaySunrise: Int {
-        guard let time = currentWeather?.sunrise else { return 0 }
-        return time
+        currentWeather == nil ? 0 : currentWeather!.sunrise
     }
     
     var currentDaySunset: Int {
-        guard let time = currentWeather?.sunset else { return 0 }
-        return time
+        currentWeather == nil ? 0 : currentWeather!.sunset
     }
     
-    private lazy var apiCaller = OpenWeatherMapAPICaller()
+    override init() {
+        super.init()
+        setupLocation()
+    }
     
     func fetchLastKnownLocation(completion: @escaping (Result<Location, Error>) -> Void) {
         plistHandler.getLocationsFormPlist { result in
@@ -56,21 +63,25 @@ class MainTableViewModel {
         plistHandler.writeToPlist(locations: [Location(lat: location.coordinate.latitude, lon: location.coordinate.longitude, cityName: "Cupertino(Apple)")])
     }
     
-    func fetchWeather(lat: CLLocationDegrees, lon: CLLocationDegrees, completion: @escaping (Result<WeatherData, Error>) -> Void) {
-        apiCaller.fetchWeather(lat: lat, lon: lon) { result in
+    func fetchWeather(for location: CLLocation) {
+        let lat = location.coordinate.latitude
+        let lon = location.coordinate.longitude
+        
+        service.fetchWeather(lat: lat, lon: lon) { result in
             switch result {
             case .failure(let error):
-                completion(.failure(error))
+                self.didFailWithError(error)
             case .success(let data):
                 self.currentWeather = data.current
                 self.dailyWeather = data.daily
                 self.hourlyWeather = data.hourly
-                completion(.success(data))
+                self.didFetchWeather(data)
             }
         }
     }
     
-    func currentCity(from location: CLLocation, completion: @escaping (Result<String,Error>) -> Void) {
+    func currentCity(completion: @escaping (Result<String,Error>) -> Void) {
+        guard let location = currentSelectedLocation else { return }
         CLGeocoder().reverseGeocodeLocation(location) { placemarks, error in
             if error == nil {
                 guard let city = placemarks?.first?.locality else { return }
@@ -123,3 +134,66 @@ class MainTableViewModel {
         }
     }
 }
+
+extension MainTableViewModel: CLLocationManagerDelegate{
+    
+    func setupLocation() {
+        locationManager.delegate = self
+        if locationManager.authorizationStatus == .denied {
+            fetchLastKnownLocation() { result in
+                switch result {
+                case .success(let location):
+                    self.currentSelectedLocation = CLLocation(latitude: location.lat, longitude: location.lon)
+                    self.fetchWeather(for: self.currentSelectedLocation!)
+                case .failure(let error):
+                    self.didFailWithError(error)
+                }
+            }
+        } else if locationManager.authorizationStatus == .authorizedWhenInUse || locationManager.authorizationStatus == .authorizedAlways {
+            if CLLocationManager.locationServicesEnabled() {
+                locationManager.startUpdatingLocation()
+            } else {
+                fetchLastKnownLocation() { result in
+                    switch result {
+                    case .success(let location):
+                        self.currentSelectedLocation = CLLocation(latitude: location.lat, longitude: location.lon)
+                    case .failure(let error):
+                        self.didFailWithError(error)
+                    }
+                }
+            }
+        } else {
+            locationManager.requestWhenInUseAuthorization()
+            locationManager.startUpdatingLocation()
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        if status != .denied, status != .notDetermined, CLLocationManager.locationServicesEnabled(){
+            locationManager.startUpdatingLocation()
+        } else {
+            fetchLastKnownLocation() { result in
+                switch result {
+                case .success(let location):
+                    self.currentSelectedLocation = CLLocation(latitude: location.lat, longitude: location.lon)
+                    
+                    self.fetchWeather(for: self.currentSelectedLocation!)
+                    
+                case .failure(let error):
+                    self.didFailWithError(error)
+                }
+            }
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if !locations.isEmpty, currentSelectedLocation == nil{
+            currentSelectedLocation = locations.first
+            locationManager.stopUpdatingLocation()
+            self.fetchWeather(for: currentSelectedLocation!)
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        didFailWithError(error)
+    }}

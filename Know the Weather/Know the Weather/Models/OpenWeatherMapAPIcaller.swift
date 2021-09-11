@@ -9,11 +9,9 @@ import Foundation
 import CoreLocation
 
 
-struct OpenWeatherMapAPICaller {
-    let weatherURL = "https://api.openweathermap.org/data/2.5/onecall?appid=2bd3a9a6ffcb9a792ca0753f462e1081&units=metric&exclude=minutely,alerts"
-    
+struct OpenWeatherMapService {
     func fetchWeather(lat: CLLocationDegrees, lon: CLLocationDegrees, completion: @escaping (Result<WeatherData, Error>) -> Void) {
-        let urlString = "\(weatherURL)&lat=\(lat)&lon=\(lon)"
+        let urlString = "\(Constants.weatherURL)&lat=\(lat)&lon=\(lon)"
         
         guard let url = URL(string: urlString) else { return }
         
@@ -25,8 +23,7 @@ struct OpenWeatherMapAPICaller {
             if let safeData = data {
                 do {
                     let result = try JSONDecoder().decode(WeatherData.self, from: safeData)
-                    let data: WeatherData = result
-                    completion(.success(data))
+                    completion(.success(result))
                 } catch {
                     completion(.failure(error))
                 }

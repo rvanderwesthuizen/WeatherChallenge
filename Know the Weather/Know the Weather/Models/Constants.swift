@@ -9,4 +9,5 @@ import Foundation
 
 enum Constants {
     static let pListPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Locations.plist")
+    static let weatherURL = "https://api.openweathermap.org/data/2.5/onecall?appid=2bd3a9a6ffcb9a792ca0753f462e1081&units=metric&exclude=minutely,alerts"
 }
