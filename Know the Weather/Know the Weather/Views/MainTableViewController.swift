@@ -87,15 +87,20 @@ class MainTableViewController: UITableViewController {
             case .success(let city):
                 self.locationLabel.text = city
             case .failure(let error):
-                self.displayErrorAlert("An error happened when trying to retrieve the location's name: \(error)")
+                self.displayErrorAlert(errorString: "An error occurred when trying to retrieve the location's name: ", error: error)
             }
         }
     }
     
-    private func displayErrorAlert(_ errorString: String){
-        let alertController = UIAlertController(title: "Error", message: errorString, preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+    private func displayErrorAlert(errorString: String, error: Error){
+        var alertController = UIAlertController(title: "Error", message: errorString, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
         
+        alertController.addAction(UIAlertAction(title: "Error", style: .default, handler: { (action) in
+            alertController = UIAlertController(title: "Display error", message: "\(error)", preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+            self.present(alertController, animated: true)
+        }))
         present(alertController, animated: true)
     }
 
@@ -155,8 +160,8 @@ extension MainTableViewController: MainTableViewModelDelegate {
         }
     }
     
-    func didFailWithError(_ error: Error) {
-        displayErrorAlert("An error accured: \(error)")
+    func didFailWithError(errorString: String, error: Error) {
+        displayErrorAlert(errorString: errorString, error: error)
     }
     
     
