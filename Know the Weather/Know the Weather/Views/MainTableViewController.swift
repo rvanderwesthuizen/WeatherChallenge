@@ -27,6 +27,7 @@ class MainTableViewController: UITableViewController {
         
         viewModel.setDefaultLocation(location: CLLocation(latitude: +37.33233141, longitude: -122.03121860))
         
+        viewModel.delegate = self
         activateActivityIndicator()
         
         tableView.backgroundView = UIImageView(image: #imageLiteral(resourceName: "DaytimeBackground"))
@@ -35,7 +36,7 @@ class MainTableViewController: UITableViewController {
         tableView.register(HourlyWeatherTableViewCell.nib(), forCellReuseIdentifier: HourlyWeatherTableViewCell.identifier)
         
         tableView.refreshControl = UIRefreshControl()
-        tableView.refreshControl?.addTarget(self, action: #selector(requestWeatherForLocation), for: .valueChanged)
+        tableView.refreshControl?.addTarget(self, action: #selector(viewModel.fetchWeather), for: .valueChanged)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -66,7 +67,7 @@ class MainTableViewController: UITableViewController {
         locationsVC.checkIfLocationIsInList(location: viewModel.currentSelectedLocation!)
         locationsVC.completion = { location in
             self.viewModel.currentSelectedLocation = location
-            self.requestWeatherForLocation()
+            self.viewModel.fetchWeather()
         }
         let navVC = UINavigationController(rootViewController: locationsVC)
         present(navVC, animated: true)
@@ -75,35 +76,6 @@ class MainTableViewController: UITableViewController {
     private func activateActivityIndicator() {
         activityIndicator.hidesWhenStopped = true
         activityIndicator.startAnimating()
-    }
-    
-    @objc private func requestWeatherForLocation(){
-        guard let location = viewModel.currentSelectedLocation else {
-            return
-        }
-        viewModel.fetchWeather(for: location) { result in
-            switch result {
-            case .failure(let error):
-                self.displayErrorAlert("An error happened when fetching weather: \(error)")
-            case .success(_):
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                    guard let current = self.viewModel.currentWeather else { return }
-                    
-                    self.conditionImage.image = UIImage(named: self.viewModel.conditionImage(conditionID: current.weather[0].id, model: current))
-                    
-                    self.setupLabels(with: current)
-                    
-                    if !self.viewModel.dayTimeFlag(time: current.time,
-                                                           sunriseTime: current.sunrise,
-                                                           sunsetTime: current.sunset) {
-                        self.tableView.backgroundView = UIImageView(image: #imageLiteral(resourceName: "NightimeBackground"))
-                    }
-                    self.activityIndicator.stopAnimating()
-                    self.tableView.refreshControl?.endRefreshing()
-                }
-            }
-        }
     }
     
     private func setupLabels(with current: Current) {
@@ -160,5 +132,32 @@ class MainTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
     }
+    
+}
+
+extension MainTableViewController: MainTableViewModelDelegate {
+    func didFetchWeather(_ weather: WeatherData) {
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+            guard let current = self.viewModel.currentWeather else { return }
+            
+            self.conditionImage.image = UIImage(named: self.viewModel.conditionImage(conditionID: current.weather[0].id, model: current))
+            
+            self.setupLabels(with: current)
+            
+            if !self.viewModel.dayTimeFlag(time: current.time,
+                                           sunriseTime: current.sunrise,
+                                           sunsetTime: current.sunset) {
+                self.tableView.backgroundView = UIImageView(image: #imageLiteral(resourceName: "NightimeBackground"))
+            }
+            self.activityIndicator.stopAnimating()
+            self.tableView.refreshControl?.endRefreshing()
+        }
+    }
+    
+    func didFailWithError(_ error: Error) {
+        displayErrorAlert("An error accured: \(error)")
+    }
+    
     
 }

@@ -9,14 +9,18 @@ import Foundation
 import CoreLocation
 import MapKit
 
+protocol MainTableViewModelDelegate {
+    func didFetchWeather(_ weather: WeatherData)
+    func didFailWithError(_ error: Error)
+}
+
 class MainTableViewModel: NSObject {
     private lazy var plistHandler = PlistHandler()
     private lazy var service = OpenWeatherMapService()
     private let locationManager = CLLocationManager()
     private var locations = [Location]()
     
-    var didFetchWeather: ((WeatherData) -> Void)?
-    var didFailWithError: ((Error) -> Void)?
+    var delegate: MainTableViewModelDelegate?
     var currentWeather: Current?
     var dailyWeather = [Daily]()
     var hourlyWeather = [Hourly]()
@@ -63,19 +67,19 @@ class MainTableViewModel: NSObject {
         plistHandler.writeToPlist(locations: [Location(lat: location.coordinate.latitude, lon: location.coordinate.longitude, cityName: "Cupertino(Apple)")])
     }
     
-    func fetchWeather(for location: CLLocation) {
-        let lat = location.coordinate.latitude
-        let lon = location.coordinate.longitude
+    @objc func fetchWeather() {
+        let lat = currentSelectedLocation!.coordinate.latitude
+        let lon = currentSelectedLocation!.coordinate.longitude
         
         service.fetchWeather(lat: lat, lon: lon) { result in
             switch result {
             case .failure(let error):
-                self.didFailWithError(error)
+                self.delegate?.didFailWithError(error)
             case .success(let data):
                 self.currentWeather = data.current
                 self.dailyWeather = data.daily
                 self.hourlyWeather = data.hourly
-                self.didFetchWeather(data)
+                self.delegate?.didFetchWeather(data)
             }
         }
     }
@@ -144,9 +148,9 @@ extension MainTableViewModel: CLLocationManagerDelegate{
                 switch result {
                 case .success(let location):
                     self.currentSelectedLocation = CLLocation(latitude: location.lat, longitude: location.lon)
-                    self.fetchWeather(for: self.currentSelectedLocation!)
+                    self.fetchWeather()
                 case .failure(let error):
-                    self.didFailWithError(error)
+                    self.delegate?.didFailWithError(error)
                 }
             }
         } else if locationManager.authorizationStatus == .authorizedWhenInUse || locationManager.authorizationStatus == .authorizedAlways {
@@ -158,7 +162,7 @@ extension MainTableViewModel: CLLocationManagerDelegate{
                     case .success(let location):
                         self.currentSelectedLocation = CLLocation(latitude: location.lat, longitude: location.lon)
                     case .failure(let error):
-                        self.didFailWithError(error)
+                        self.delegate?.didFailWithError(error)
                     }
                 }
             }
@@ -177,10 +181,10 @@ extension MainTableViewModel: CLLocationManagerDelegate{
                 case .success(let location):
                     self.currentSelectedLocation = CLLocation(latitude: location.lat, longitude: location.lon)
                     
-                    self.fetchWeather(for: self.currentSelectedLocation!)
+                    self.fetchWeather()
                     
                 case .failure(let error):
-                    self.didFailWithError(error)
+                    self.delegate?.didFailWithError(error)
                 }
             }
         }
@@ -190,10 +194,10 @@ extension MainTableViewModel: CLLocationManagerDelegate{
         if !locations.isEmpty, currentSelectedLocation == nil{
             currentSelectedLocation = locations.first
             locationManager.stopUpdatingLocation()
-            self.fetchWeather(for: currentSelectedLocation!)
+            self.fetchWeather()
         }
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        didFailWithError(error)
+        delegate?.didFailWithError(error)
     }}
