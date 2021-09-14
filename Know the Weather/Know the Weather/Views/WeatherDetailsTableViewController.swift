@@ -7,9 +7,15 @@
 
 import UIKit
 
-class CurrentWeatherDetailsTableViewController: UITableViewController {
+class WeatherDetailsTableViewController: UITableViewController {
     var isDay: Bool?
-    var currentWeather: Current?
+    var weather: [Daily]?
+    var count: Int = 0
+    
+    @IBOutlet private weak var conditionImageView: UIImageView!
+    @IBOutlet private weak var tempLabel: UILabel!
+    @IBOutlet private weak var feelsLikeLabel: UILabel!
+    @IBOutlet private weak var conditionLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()

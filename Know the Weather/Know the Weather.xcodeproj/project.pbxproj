@@ -32,7 +32,7 @@
 		C986445B26E6116700CEA8FE /* MainTableViewTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C986445A26E6116700CEA8FE /* MainTableViewTest.swift */; };
 		C986445D26E61C5100CEA8FE /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = C986445C26E61C5100CEA8FE /* Location.swift */; };
 		C986446026E6237A00CEA8FE /* PlistHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C986445F26E6237A00CEA8FE /* PlistHandler.swift */; };
-		C986446226E8A7B800CEA8FE /* CurrentWeatherDetailsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C986446126E8A7B800CEA8FE /* CurrentWeatherDetailsTableViewController.swift */; };
+		C986446226E8A7B800CEA8FE /* WeatherDetailsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C986446126E8A7B800CEA8FE /* WeatherDetailsTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -84,7 +84,7 @@
 		C986445A26E6116700CEA8FE /* MainTableViewTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTableViewTest.swift; sourceTree = "<group>"; };
 		C986445C26E61C5100CEA8FE /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		C986445F26E6237A00CEA8FE /* PlistHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlistHandler.swift; sourceTree = "<group>"; };
-		C986446126E8A7B800CEA8FE /* CurrentWeatherDetailsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentWeatherDetailsTableViewController.swift; sourceTree = "<group>"; };
+		C986446126E8A7B800CEA8FE /* WeatherDetailsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailsTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -198,7 +198,7 @@
 				C96F47E726D8F0D7005553EE /* Main.storyboard */,
 				C96F481126D8F283005553EE /* MainTableViewController.swift */,
 				C986445226E6015A00CEA8FE /* LocationsTableViewController.swift */,
-				C986446126E8A7B800CEA8FE /* CurrentWeatherDetailsTableViewController.swift */,
+				C986446126E8A7B800CEA8FE /* WeatherDetailsTableViewController.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -367,7 +367,7 @@
 				C986445526E6061200CEA8FE /* LocationsTableViewModel.swift in Sources */,
 				C96F481226D8F283005553EE /* MainTableViewController.swift in Sources */,
 				C986445D26E61C5100CEA8FE /* Location.swift in Sources */,
-				C986446226E8A7B800CEA8FE /* CurrentWeatherDetailsTableViewController.swift in Sources */,
+				C986446226E8A7B800CEA8FE /* WeatherDetailsTableViewController.swift in Sources */,
 				C986444326E1F19600CEA8FE /* HourlyWeatherTableViewCell.swift in Sources */,
 				C96F481926D90F6A005553EE /* OpenWeatherMapService.swift in Sources */,
 				C96F47E426D8F0D7005553EE /* SceneDelegate.swift in Sources */,

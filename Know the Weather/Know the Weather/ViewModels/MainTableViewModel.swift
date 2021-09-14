@@ -61,7 +61,7 @@ class MainTableViewModel: NSObject {
             case .success(let locations):
                 self.locations = locations
             case .failure(let error):
-                self.delegate?.didFailWithError(errorString: "An error occurred while trying to set default locations", error: error)
+                self.delegate?.didFailWithError(errorString: "An error occurred while trying to set default locations.", error: error)
             }
         }
         plistHandler.writeToPlist(locations: [Location(lat: location.coordinate.latitude, lon: location.coordinate.longitude, cityName: "Cupertino(Apple)")])
@@ -74,7 +74,7 @@ class MainTableViewModel: NSObject {
         service.fetchWeather(lat: lat, lon: lon) { result in
             switch result {
             case .failure(let error):
-                self.delegate?.didFailWithError(errorString: "An error occurred while fetching the weather", error: error)
+                self.delegate?.didFailWithError(errorString: "An error occurred while fetching the weather.", error: error)
             case .success(let data):
                 self.currentWeather = data.current
                 self.dailyWeather = data.daily
@@ -150,7 +150,7 @@ extension MainTableViewModel: CLLocationManagerDelegate{
                     self.currentSelectedLocation = CLLocation(latitude: location.lat, longitude: location.lon)
                     self.fetchWeather()
                 case .failure(let error):
-                    self.delegate?.didFailWithError(errorString: "An error occurred while retrieving last known location data", error: error)
+                    self.delegate?.didFailWithError(errorString: "An error occurred while retrieving last known location data.", error: error)
                 }
             }
         } else if locationManager.authorizationStatus == .authorizedWhenInUse || locationManager.authorizationStatus == .authorizedAlways {
@@ -162,7 +162,7 @@ extension MainTableViewModel: CLLocationManagerDelegate{
                     case .success(let location):
                         self.currentSelectedLocation = CLLocation(latitude: location.lat, longitude: location.lon)
                     case .failure(let error):
-                        self.delegate?.didFailWithError(errorString: "An error occurred while retrieving last known location data", error: error)
+                        self.delegate?.didFailWithError(errorString: "An error occurred while retrieving last known location data.", error: error)
                     }
                 }
             }
@@ -184,7 +184,7 @@ extension MainTableViewModel: CLLocationManagerDelegate{
                     self.fetchWeather()
                     
                 case .failure(let error):
-                    self.delegate?.didFailWithError(errorString: "An error occurred while retrieving last known location data", error: error)
+                    self.delegate?.didFailWithError(errorString: "An error occurred while retrieving last known location data.", error: error)
                 }
             }
         }
@@ -199,5 +199,5 @@ extension MainTableViewModel: CLLocationManagerDelegate{
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        delegate?.didFailWithError(errorString: "An error occurred while retrieving location data", error: error)
+        delegate?.didFailWithError(errorString: "An error occurred while retrieving location data.", error: error)
     }}

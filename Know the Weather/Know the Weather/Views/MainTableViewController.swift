@@ -36,7 +36,7 @@ class MainTableViewController: UITableViewController {
         tableView.register(HourlyWeatherTableViewCell.nib(), forCellReuseIdentifier: HourlyWeatherTableViewCell.identifier)
         
         tableView.refreshControl = UIRefreshControl()
-        tableView.refreshControl?.addTarget(self, action: #selector(viewModel.fetchWeather), for: .valueChanged)
+        tableView.refreshControl?.addTarget(viewModel.self, action: #selector(viewModel.fetchWeather), for: .valueChanged)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -50,11 +50,12 @@ class MainTableViewController: UITableViewController {
     }
     
     @objc private func didTapCurrentWeather() {
-        if let currentWeatherDetailTVC = storyboard?.instantiateViewController(identifier: "CurrentWeatherDetail") as? CurrentWeatherDetailsTableViewController {
+        if let weatherDetailTVC = storyboard?.instantiateViewController(identifier: "CurrentWeatherDetail") as? WeatherDetailsTableViewController {
             guard let current = self.viewModel.currentWeather else { return }
-            currentWeatherDetailTVC.isDay = viewModel.dayTimeFlag(time: current.time, sunriseTime: current.sunrise, sunsetTime: current.sunset)
-            currentWeatherDetailTVC.currentWeather = current
-            navigationController?.pushViewController(currentWeatherDetailTVC, animated: true)
+            weatherDetailTVC.isDay = viewModel.dayTimeFlag(time: current.time, sunriseTime: current.sunrise, sunsetTime: current.sunset)
+            weatherDetailTVC.weather = self.viewModel.dailyWeather
+            weatherDetailTVC.count = 0
+            navigationController?.pushViewController(weatherDetailTVC, animated: true)
         }
     }
     
@@ -87,7 +88,7 @@ class MainTableViewController: UITableViewController {
             case .success(let city):
                 self.locationLabel.text = city
             case .failure(let error):
-                self.displayErrorAlert(errorString: "An error occurred when trying to retrieve the location's name: ", error: error)
+                self.displayErrorAlert(errorString: "An error occurred when trying to retrieve the location's name. ", error: error)
             }
         }
     }
