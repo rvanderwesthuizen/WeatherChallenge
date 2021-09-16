@@ -9,7 +9,7 @@ import Foundation
 
 class HourWeatherCollectionViewCellModel {
     
-    func conditionImage(conditionID: Int, hour: Int, currentSunsetTime: Int, currentSunriseTime: Int) -> String{
+    func conditionImage(conditionID: Int, hour: Int, currentSunsetTime: Int, currentSunriseTime: Int, nextDaySunriseTime: Int) -> String{
         let imageNamePrefix = "weezle_"
         
         switch conditionID {
@@ -24,41 +24,43 @@ class HourWeatherCollectionViewCellModel {
         case 701...781:
             return "\(imageNamePrefix)fog"
         case 800:
-            if !dayTimeFlag(time: hour, sunriseTime: currentSunriseTime, sunsetTime: currentSunsetTime) {
+            if !dayTimeFlag(time: hour, sunriseTime: currentSunriseTime, sunsetTime: currentSunsetTime,
+                            nextDaySunrise: nextDaySunriseTime) {
                 return "\(imageNamePrefix)fullmoon"
             }
             return "\(imageNamePrefix)sun"
         case 801:
-            if !dayTimeFlag(time: hour, sunriseTime: currentSunriseTime, sunsetTime: currentSunsetTime) {
+            if !dayTimeFlag(time: hour, sunriseTime: currentSunriseTime, sunsetTime: currentSunsetTime,
+                            nextDaySunrise: nextDaySunriseTime) {
                 return "\(imageNamePrefix)moon_cloud"
             }
             return "\(imageNamePrefix)cloud_sun"
         case 802:
-        return "\(imageNamePrefix)cloud"
+            return "\(imageNamePrefix)cloud"
         case 803:
-        return "\(imageNamePrefix)max_cloud"
+            return "\(imageNamePrefix)max_cloud"
         case 804:
-        return "\(imageNamePrefix)overcast"
+            return "\(imageNamePrefix)overcast"
         default:
-        return "\(imageNamePrefix)sun"
-    }
-}
-
-func dayTimeFlag(time: Int, sunriseTime: Int, sunsetTime: Int) -> Bool {
-    if time < sunsetTime && time >= sunriseTime {
-        return true
-    }
-    return false
-}
-
-func getTimeFromDate(_ date: Date?) -> String {
-    guard let inputDate = date else {
-        return ""
+            return "\(imageNamePrefix)sun"
+        }
     }
     
-    let formatter = DateFormatter()
-    formatter.dateStyle = .medium
-    formatter.dateFormat = "HH:mm"
-    return formatter.string(from: inputDate)
-}
+    func dayTimeFlag(time: Int, sunriseTime: Int, sunsetTime: Int, nextDaySunrise: Int) -> Bool {
+        if time < sunsetTime && time >= sunriseTime || time > nextDaySunrise {
+            return true
+        }
+        return false
+    }
+    
+    func getTimeFromDate(_ date: Date?) -> String {
+        guard let inputDate = date else {
+            return ""
+        }
+        
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.dateFormat = "HH:mm"
+        return formatter.string(from: inputDate)
+    }
 }

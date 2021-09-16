@@ -9,8 +9,9 @@ import UIKit
 
 class HourlyWeatherTableViewCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
-    private var models = [Hourly]()
-    private var model: Current?
+    private var hourly = [Hourly]()
+    private var current: Current?
+    private var nextDaySunrise: Int?
 
     @IBOutlet private weak var collectionView: UICollectionView!
     
@@ -27,9 +28,10 @@ class HourlyWeatherTableViewCell: UITableViewCell, UICollectionViewDelegate, UIC
         collectionView.dataSource = self
     }
     
-    func configure (with models: [Hourly], and model: Current) {
-        self.models = models
-        self.model = model
+    func configure (with hourly: [Hourly], current: Current, nextDaySunrise: Int) {
+        self.hourly = hourly
+        self.current = current
+        self.nextDaySunrise = nextDaySunrise
         collectionView.reloadData()
     }
 
@@ -38,7 +40,7 @@ class HourlyWeatherTableViewCell: UITableViewCell, UICollectionViewDelegate, UIC
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        models.count
+        hourly.count
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -47,7 +49,7 @@ class HourlyWeatherTableViewCell: UITableViewCell, UICollectionViewDelegate, UIC
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HourWeatherCollectionViewCell.identifier, for: indexPath) as! HourWeatherCollectionViewCell
-        cell.configure(with: models[indexPath.row], currentSunriseTime: model!.sunrise, currentSunsetTime: model!.sunset)
+        cell.configure(with: hourly[indexPath.row], currentSunriseTime: current!.sunrise, currentSunsetTime: current!.sunset, nextDaySunriseTime: nextDaySunrise!)
         return cell
     }
     

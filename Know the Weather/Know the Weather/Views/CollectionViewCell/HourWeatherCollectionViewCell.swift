@@ -21,11 +21,7 @@ class HourWeatherCollectionViewCell: UICollectionViewCell {
         UINib(nibName: "HourWeatherCollectionViewCell", bundle: nil)
     }
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-    
-    func configure(with model: Hourly, currentSunriseTime: Int, currentSunsetTime: Int) {
+    func configure(with model: Hourly, currentSunriseTime: Int, currentSunsetTime: Int, nextDaySunriseTime: Int) {
         tempLabel.text = "\(model.temp)°"
         timestampLabel.text = viewModel.getTimeFromDate(Date(timeIntervalSince1970: Double(model.time)))
         conditionImage.contentMode = .scaleAspectFit
@@ -33,7 +29,8 @@ class HourWeatherCollectionViewCell: UICollectionViewCell {
                                         conditionID: model.weather[0].id,
                                         hour: model.time,
                                         currentSunsetTime: currentSunsetTime,
-                                        currentSunriseTime: currentSunriseTime))
+                                        currentSunriseTime: currentSunriseTime,
+                                        nextDaySunriseTime: nextDaySunriseTime))
     }
     
 }

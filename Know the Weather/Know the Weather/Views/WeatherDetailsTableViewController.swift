@@ -26,6 +26,7 @@ class WeatherDetailsTableViewController: UITableViewController {
         guard let dayTimeCheck = isDay else { return }
         guard let imageString = conditionImageString else { return }
         tableView.backgroundView = (dayTimeCheck ? UIImageView(image: #imageLiteral(resourceName: "DaytimeBackground")) : UIImageView(image: #imageLiteral(resourceName: "NightimeBackground")))
+        tableView.register(DetailWeatherTableViewCell.nib, forCellReuseIdentifier: DetailWeatherTableViewCell.identifier)
         
         switch scope {
         case .current(let current):
@@ -42,7 +43,7 @@ class WeatherDetailsTableViewController: UITableViewController {
             summaryLabel.text = weather[index].weather[0].description
             conditionImageView.image = UIImage(named: imageString)
         case .none:
-            break
+            return
         }
     }
     
@@ -55,23 +56,21 @@ class WeatherDetailsTableViewController: UITableViewController {
     
     // MARK: - Table view data source
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 0
-    }
-
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
+        5
     }
 
-    /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: DetailWeatherTableViewCell.identifier, for: indexPath) as! DetailWeatherTableViewCell
 
-        // Configure the cell...
+        cell.configureWith(scope: scope!, day: daily![index], index: indexPath.row)
 
         return cell
     }
-    */
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        80
+    }
 
     /*
     // Override to support conditional editing of the table view.

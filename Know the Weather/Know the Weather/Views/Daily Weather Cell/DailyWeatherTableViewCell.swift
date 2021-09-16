@@ -21,10 +21,6 @@ class DailyWeatherTableViewCell: UITableViewCell {
     static func nib() -> UINib {
         UINib(nibName: "DailyWeatherTableViewCell", bundle: nil)
     }
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)

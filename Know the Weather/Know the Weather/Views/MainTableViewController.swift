@@ -148,8 +148,7 @@ class MainTableViewController: UITableViewController {
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: HourlyWeatherTableViewCell.identifier, for: indexPath) as! HourlyWeatherTableViewCell
             guard let current = viewModel.currentWeather else { return cell}
-            cell.configure(with: viewModel.hourlyWeather, and: current)
-            cell.selectionStyle = .none
+            cell.configure(with: viewModel.hourlyWeather, current: current, nextDaySunrise: viewModel.dailyWeather[1].sunrise)
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: DailyWeatherTableViewCell.identifier, for: indexPath) as! DailyWeatherTableViewCell
