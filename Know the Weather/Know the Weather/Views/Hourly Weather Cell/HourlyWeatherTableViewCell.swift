@@ -9,8 +9,9 @@ import UIKit
 
 class HourlyWeatherTableViewCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
-    var models = [Hourly]()
-    
+    private var models = [Hourly]()
+    private var model: Current?
+
     @IBOutlet private weak var collectionView: UICollectionView!
     
     static let identifier = "HourlyWeatherTableViewCell"
@@ -26,8 +27,9 @@ class HourlyWeatherTableViewCell: UITableViewCell, UICollectionViewDelegate, UIC
         collectionView.dataSource = self
     }
     
-    func configure (with models: [Hourly]) {
+    func configure (with models: [Hourly], and model: Current) {
         self.models = models
+        self.model = model
         collectionView.reloadData()
     }
 
@@ -45,7 +47,7 @@ class HourlyWeatherTableViewCell: UITableViewCell, UICollectionViewDelegate, UIC
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HourWeatherCollectionViewCell.identifier, for: indexPath) as! HourWeatherCollectionViewCell
-        cell.configure(with: models[indexPath.row])
+        cell.configure(with: models[indexPath.row], currentSunriseTime: model!.sunrise, currentSunsetTime: model!.sunset)
         return cell
     }
     

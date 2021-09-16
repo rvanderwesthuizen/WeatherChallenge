@@ -181,6 +181,12 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="DLC-4P-0p7"/>
+                    <connections>
+                        <outlet property="conditionImageView" destination="KCG-9p-clR" id="OPw-jo-G5C"/>
+                        <outlet property="feelsLikeLabel" destination="V3k-BN-GVp" id="OEW-Hq-amU"/>
+                        <outlet property="summaryLabel" destination="RTJ-Td-swH" id="Scv-3c-Bus"/>
+                        <outlet property="tempLabel" destination="B5d-B2-JOI" id="Ee1-v1-qO5"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gpt-3k-H3p" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

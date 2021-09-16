@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C91A336126F335C700942340 /* WeatherScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91A336026F335C700942340 /* WeatherScope.swift */; };
 		C96F47E226D8F0D7005553EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96F47E126D8F0D7005553EE /* AppDelegate.swift */; };
 		C96F47E426D8F0D7005553EE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96F47E326D8F0D7005553EE /* SceneDelegate.swift */; };
 		C96F47E926D8F0D7005553EE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C96F47E726D8F0D7005553EE /* Main.storyboard */; };
@@ -53,6 +54,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C91A336026F335C700942340 /* WeatherScope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherScope.swift; sourceTree = "<group>"; };
 		C96F47DE26D8F0D7005553EE /* Know the Weather.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Know the Weather.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C96F47E126D8F0D7005553EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C96F47E326D8F0D7005553EE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -184,6 +186,7 @@
 				C986445626E6075D00CEA8FE /* Constants.swift */,
 				C986445C26E61C5100CEA8FE /* Location.swift */,
 				C986445F26E6237A00CEA8FE /* PlistHandler.swift */,
+				C91A336026F335C700942340 /* WeatherScope.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -372,6 +375,7 @@
 				C96F481926D90F6A005553EE /* OpenWeatherMapService.swift in Sources */,
 				C96F47E426D8F0D7005553EE /* SceneDelegate.swift in Sources */,
 				C986446026E6237A00CEA8FE /* PlistHandler.swift in Sources */,
+				C91A336126F335C700942340 /* WeatherScope.swift in Sources */,
 				C986443626E0BB7400CEA8FE /* MainTableViewModel.swift in Sources */,
 				C986444D26E5E5A900CEA8FE /* DailyWeatherTableViewCellModel.swift in Sources */,
 				C986444A26E1F43F00CEA8FE /* HourWeatherCollectionViewCell.swift in Sources */,

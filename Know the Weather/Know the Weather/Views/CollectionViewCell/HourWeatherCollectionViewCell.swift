@@ -8,7 +8,7 @@
 import UIKit
 
 class HourWeatherCollectionViewCell: UICollectionViewCell {
-
+    
     @IBOutlet private weak var tempLabel: UILabel!
     @IBOutlet private weak var timestampLabel: UILabel!
     @IBOutlet private weak var conditionImage: UIImageView!
@@ -25,11 +25,15 @@ class HourWeatherCollectionViewCell: UICollectionViewCell {
         super.awakeFromNib()
     }
     
-    func configure(with model: Hourly) {
+    func configure(with model: Hourly, currentSunriseTime: Int, currentSunsetTime: Int) {
         tempLabel.text = "\(model.temp)°"
         timestampLabel.text = viewModel.getTimeFromDate(Date(timeIntervalSince1970: Double(model.time)))
         conditionImage.contentMode = .scaleAspectFit
-        conditionImage.image = UIImage(named: viewModel.conditionImage(conditionID: model.weather[0].id))
+        conditionImage.image = UIImage(named: viewModel.conditionImage(
+                                        conditionID: model.weather[0].id,
+                                        hour: model.time,
+                                        currentSunsetTime: currentSunsetTime,
+                                        currentSunriseTime: currentSunriseTime))
     }
-
+    
 }

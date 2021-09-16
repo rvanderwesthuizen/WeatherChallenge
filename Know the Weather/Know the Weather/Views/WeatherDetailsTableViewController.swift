@@ -9,19 +9,48 @@ import UIKit
 
 class WeatherDetailsTableViewController: UITableViewController {
     var isDay: Bool?
-    var weather: [Daily]?
-    var count: Int = 0
+    var current: Current?
+    var daily: [Daily]?
+    var index: Int = 0
+    var conditionImageString: String?
+    var scope: WeatherScope?
     
     @IBOutlet private weak var conditionImageView: UIImageView!
     @IBOutlet private weak var tempLabel: UILabel!
     @IBOutlet private weak var feelsLikeLabel: UILabel!
-    @IBOutlet private weak var conditionLabel: UILabel!
+    @IBOutlet private weak var summaryLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         guard let dayTimeCheck = isDay else { return }
+        guard let imageString = conditionImageString else { return }
         tableView.backgroundView = (dayTimeCheck ? UIImageView(image: #imageLiteral(resourceName: "DaytimeBackground")) : UIImageView(image: #imageLiteral(resourceName: "NightimeBackground")))
+        
+        switch scope {
+        case .current(let current):
+            title = getTitleFromDate(Date(timeIntervalSince1970: Double(current.time)))
+            tempLabel.text = "\(current.temp)°"
+            feelsLikeLabel.text = "Feels: \(current.feelsLike)°"
+            summaryLabel.text = current.weather[0].description
+            conditionImageView.image = UIImage(named: imageString)
+        case .daily(_):
+            guard let weather = daily else { return }
+            title = getTitleFromDate(Date(timeIntervalSince1970: Double(weather[index].time)))
+            tempLabel.text = "\(weather[index].temp.day)°"
+            feelsLikeLabel.text = "Feels: \(weather[index].feelsLike.day)°"
+            summaryLabel.text = weather[index].weather[0].description
+            conditionImageView.image = UIImage(named: imageString)
+        case .none:
+            break
+        }
+    }
+    
+    func getTitleFromDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.dateFormat = "EEEE, MMM d"
+        return formatter.string(from: date)
     }
     
     // MARK: - Table view data source

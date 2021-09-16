@@ -15,27 +15,22 @@ protocol MainTableViewModelDelegate {
 }
 
 class MainTableViewModel: NSObject {
+    //MARK: - Private Variables
     private lazy var plistHandler = PlistHandler()
     private lazy var service = OpenWeatherMapService()
     private let locationManager = CLLocationManager()
     private var locations = [Location]()
     
+    //MARK: - Public Variables
     var delegate: MainTableViewModelDelegate?
     var currentWeather: Current?
     var dailyWeather = [Daily]()
     var hourlyWeather = [Hourly]()
     var currentSelectedLocation: CLLocation?
     
+    //MARK: - Calculated Variables
     var dailyCount: Int {
         dailyWeather.count
-    }
-    
-    var currentDaySunrise: Int {
-        currentWeather == nil ? 0 : currentWeather!.sunrise
-    }
-    
-    var currentDaySunset: Int {
-        currentWeather == nil ? 0 : currentWeather!.sunset
     }
     
     override init() {
@@ -103,7 +98,7 @@ class MainTableViewModel: NSObject {
         return false
     }
     
-    func conditionImage(conditionID: Int, model: Current) -> String{
+    func conditionImage(conditionID: Int, scope: WeatherScope) -> String{
         let imageNamePrefix = "weezle_"
         
         switch conditionID {
@@ -118,15 +113,25 @@ class MainTableViewModel: NSObject {
         case 701...781:
             return "\(imageNamePrefix)fog"
         case 800:
-            if !dayTimeFlag(time: model.time, sunriseTime: model.sunrise, sunsetTime: model.sunset) {
-                return "\(imageNamePrefix)fullmoon"
+            switch scope {
+            case .current(let model):
+                if !dayTimeFlag(time: model.time, sunriseTime: model.sunrise, sunsetTime: model.sunset) {
+                    return "\(imageNamePrefix)fullmoon"
+                }
+                return "\(imageNamePrefix)sun"
+            case .daily(_):
+                return "\(imageNamePrefix)sun"
             }
-            return "\(imageNamePrefix)sun"
         case 801:
-            if !dayTimeFlag(time: model.time, sunriseTime: model.sunrise, sunsetTime: model.sunset) {
-                return "\(imageNamePrefix)moon_cloud"
+            switch scope {
+            case .current(let model):
+                if !dayTimeFlag(time: model.time, sunriseTime: model.sunrise, sunsetTime: model.sunset) {
+                    return "\(imageNamePrefix)moon_cloud"
+                }
+                return "\(imageNamePrefix)cloud_sun"
+            case .daily(_):
+                return "\(imageNamePrefix)cloud_sun"
             }
-            return "\(imageNamePrefix)cloud_sun"
         case 802:
             return "\(imageNamePrefix)cloud"
         case 803:
@@ -139,6 +144,7 @@ class MainTableViewModel: NSObject {
     }
 }
 
+//MARK: - CoreLocation
 extension MainTableViewModel: CLLocationManagerDelegate{
     
     func setupLocation() {

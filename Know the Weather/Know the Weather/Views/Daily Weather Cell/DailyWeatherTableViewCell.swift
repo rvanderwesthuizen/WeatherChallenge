@@ -30,10 +30,10 @@ class DailyWeatherTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
     
-    func configure(with model: Daily){
+    func configure(with model: Daily, conditionImageString: String){
         highTempLabel.text = "\(model.temp.max)°"
         lowTempLabel.text = "\(model.temp.min)°"
         dateLabel.text = viewModel.getDayFromDate(Date(timeIntervalSince1970: Double(model.time)))
-        conditionImage.image = UIImage(named: viewModel.conditionImage(conditionID: model.weather[0].id))
+        conditionImage.image = UIImage(named: conditionImageString)
     }
 }
