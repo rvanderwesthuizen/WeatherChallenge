@@ -9,42 +9,78 @@ import Foundation
 import CoreLocation
 import MapKit
 
-class MainTableViewModel {
+protocol MainTableViewModelDelegate {
+    func didFetchWeather(_ weather: WeatherData)
+    func didFailWithError(errorString: String, error: Error)
+}
+
+class MainTableViewModel: NSObject {
+    //MARK: - Private Variables
+    private lazy var plistHandler = PlistHandler()
+    private lazy var service = OpenWeatherMapService()
+    private let locationManager = CLLocationManager()
+    private var locations = [Location]()
+    
+    //MARK: - Public Variables
+    var delegate: MainTableViewModelDelegate?
     var currentWeather: Current?
     var dailyWeather = [Daily]()
     var hourlyWeather = [Hourly]()
+    var currentSelectedLocation: CLLocation?
     
+    //MARK: - Calculated Variables
     var dailyCount: Int {
         dailyWeather.count
     }
     
-    var currentDaySunrise: Int {
-        guard let time = currentWeather?.sunrise else { return 0 }
-        return time
+    override init() {
+        super.init()
+        setupLocation()
     }
     
-    var currentDaySunset: Int {
-        guard let time = currentWeather?.sunset else { return 0 }
-        return time
-    }
-    
-    private lazy var apiCaller = OpenWeatherMapAPICaller()
-    
-    func fetchWeather(lat: CLLocationDegrees, lon: CLLocationDegrees, completion: @escaping (Result<WeatherData, Error>) -> Void) {
-        apiCaller.fetchWeather(lat: lat, lon: lon) { result in
+    func fetchLastKnownLocation(completion: @escaping (Result<Location, Error>) -> Void) {
+        plistHandler.getLocationsFormPlist { result in
             switch result {
+            case .success(let locations):
+                completion(.success(locations.first!))
             case .failure(let error):
                 completion(.failure(error))
-            case .success(let data):
-                self.currentWeather = data.current
-                self.dailyWeather = data.daily
-                self.hourlyWeather = data.hourly
-    completion(.success(data))
             }
         }
     }
     
-    func currentCity(from location: CLLocation, completion: @escaping (Result<String,Error>) -> Void) {
+    func setDefaultLocation(location: CLLocation) {
+        locations.append(Location(lat: location.coordinate.latitude, lon: location.coordinate.longitude, cityName: "Cupertino(Apple)"))
+        plistHandler.getLocationsFormPlist { result in
+            switch result {
+            case .success(let locations):
+                self.locations = locations
+            case .failure(let error):
+                self.delegate?.didFailWithError(errorString: "An error occurred while trying to set default locations.", error: error)
+            }
+        }
+        plistHandler.writeToPlist(locations: [Location(lat: location.coordinate.latitude, lon: location.coordinate.longitude, cityName: "Cupertino(Apple)")])
+    }
+    
+    @objc func fetchWeather() {
+        let lat = currentSelectedLocation!.coordinate.latitude
+        let lon = currentSelectedLocation!.coordinate.longitude
+        
+        service.fetchWeather(lat: lat, lon: lon) { result in
+            switch result {
+            case .failure(let error):
+                self.delegate?.didFailWithError(errorString: "An error occurred while fetching the weather.", error: error)
+            case .success(let data):
+                self.currentWeather = data.current
+                self.dailyWeather = data.daily
+                self.hourlyWeather = data.hourly
+                self.delegate?.didFetchWeather(data)
+            }
+        }
+    }
+    
+    func currentCity(completion: @escaping (Result<String,Error>) -> Void) {
+        guard let location = currentSelectedLocation else { return }
         CLGeocoder().reverseGeocodeLocation(location) { placemarks, error in
             if error == nil {
                 guard let city = placemarks?.first?.locality else { return }
@@ -58,11 +94,13 @@ class MainTableViewModel {
     func dayTimeFlag(time: Int, sunriseTime: Int, sunsetTime: Int) -> Bool {
         if time < sunsetTime && time >= sunriseTime {
             return true
+        } else if time > sunriseTime{
+            return true
         }
         return false
     }
     
-    func conditionImage(conditionID: Int, model: Current) -> String{
+    func conditionImage(conditionID: Int, scope: WeatherScope) -> String{
         let imageNamePrefix = "weezle_"
         
         switch conditionID {
@@ -77,15 +115,25 @@ class MainTableViewModel {
         case 701...781:
             return "\(imageNamePrefix)fog"
         case 800:
-            if !dayTimeFlag(time: model.time, sunriseTime: model.sunrise, sunsetTime: model.sunset) {
-                return "\(imageNamePrefix)fullmoon"
+            switch scope {
+            case .current(let model):
+                if !dayTimeFlag(time: model.time, sunriseTime: model.sunrise, sunsetTime: model.sunset) {
+                    return "\(imageNamePrefix)fullmoon"
+                }
+                return "\(imageNamePrefix)sun"
+            case .daily(_):
+                return "\(imageNamePrefix)sun"
             }
-            return "\(imageNamePrefix)sun"
         case 801:
-            if !dayTimeFlag(time: model.time, sunriseTime: model.sunrise, sunsetTime: model.sunset) {
-                return "\(imageNamePrefix)moon_cloud"
+            switch scope {
+            case .current(let model):
+                if !dayTimeFlag(time: model.time, sunriseTime: model.sunrise, sunsetTime: model.sunset) {
+                    return "\(imageNamePrefix)moon_cloud"
+                }
+                return "\(imageNamePrefix)cloud_sun"
+            case .daily(_):
+                return "\(imageNamePrefix)cloud_sun"
             }
-            return "\(imageNamePrefix)cloud_sun"
         case 802:
             return "\(imageNamePrefix)cloud"
         case 803:
@@ -97,3 +145,67 @@ class MainTableViewModel {
         }
     }
 }
+
+//MARK: - CoreLocation
+extension MainTableViewModel: CLLocationManagerDelegate{
+    
+    func setupLocation() {
+        locationManager.delegate = self
+        if locationManager.authorizationStatus == .denied {
+            fetchLastKnownLocation() { result in
+                switch result {
+                case .success(let location):
+                    self.currentSelectedLocation = CLLocation(latitude: location.lat, longitude: location.lon)
+                    self.fetchWeather()
+                case .failure(let error):
+                    self.delegate?.didFailWithError(errorString: "An error occurred while retrieving last known location data.", error: error)
+                }
+            }
+        } else if locationManager.authorizationStatus == .authorizedWhenInUse || locationManager.authorizationStatus == .authorizedAlways {
+            if CLLocationManager.locationServicesEnabled() {
+                locationManager.startUpdatingLocation()
+            } else {
+                fetchLastKnownLocation() { result in
+                    switch result {
+                    case .success(let location):
+                        self.currentSelectedLocation = CLLocation(latitude: location.lat, longitude: location.lon)
+                    case .failure(let error):
+                        self.delegate?.didFailWithError(errorString: "An error occurred while retrieving last known location data.", error: error)
+                    }
+                }
+            }
+        } else {
+            locationManager.requestWhenInUseAuthorization()
+            locationManager.startUpdatingLocation()
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        if status != .denied, status != .notDetermined, CLLocationManager.locationServicesEnabled(){
+            locationManager.startUpdatingLocation()
+        } else {
+            fetchLastKnownLocation() { result in
+                switch result {
+                case .success(let location):
+                    self.currentSelectedLocation = CLLocation(latitude: location.lat, longitude: location.lon)
+                    
+                    self.fetchWeather()
+                    
+                case .failure(let error):
+                    self.delegate?.didFailWithError(errorString: "An error occurred while retrieving last known location data.", error: error)
+                }
+            }
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if !locations.isEmpty, currentSelectedLocation == nil{
+            currentSelectedLocation = locations.first
+            locationManager.stopUpdatingLocation()
+            self.fetchWeather()
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        delegate?.didFailWithError(errorString: "An error occurred while retrieving location data.", error: error)
+    }}

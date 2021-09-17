@@ -24,6 +24,7 @@ class LocationsTableViewModel {
                     if loc.lat == location.coordinate.latitude && loc.lon == location.coordinate.longitude {
                         completion(.success(true))
                     }
+                    completion(.success(false))
                 }
             case .failure(let error):
                 completion(.failure(error))
@@ -45,5 +46,18 @@ class LocationsTableViewModel {
     
     func writeToPlist(locations: [Location]) {
         plistHandler.writeToPlist(locations: locations)
+    }
+    
+    func addLocation(from location: CLLocation, completion: @escaping (Result<String,Error>) -> Void) {
+        CLGeocoder().reverseGeocodeLocation(location) { placemarks, error in
+            if error == nil {
+                guard let city = placemarks?.first?.locality else { return }
+                self.locations.append(Location(lat: location.coordinate.latitude, lon: location.coordinate.longitude, cityName: city))
+                self.writeToPlist(locations: self.locations)
+                completion(.success(city))
+            } else {
+                completion(.failure(error!))
+            }
+        }
     }
 }

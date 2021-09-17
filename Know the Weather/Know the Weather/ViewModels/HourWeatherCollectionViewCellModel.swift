@@ -9,7 +9,7 @@ import Foundation
 
 class HourWeatherCollectionViewCellModel {
     
-    func conditionImage(conditionID: Int) -> String{
+    func conditionImage(conditionID: Int, hour: Int, currentSunsetTime: Int, currentSunriseTime: Int, nextDaySunriseTime: Int) -> String{
         let imageNamePrefix = "weezle_"
         
         switch conditionID {
@@ -24,8 +24,16 @@ class HourWeatherCollectionViewCellModel {
         case 701...781:
             return "\(imageNamePrefix)fog"
         case 800:
+            if !dayTimeFlag(time: hour, sunriseTime: currentSunriseTime, sunsetTime: currentSunsetTime,
+                            nextDaySunrise: nextDaySunriseTime) {
+                return "\(imageNamePrefix)fullmoon"
+            }
             return "\(imageNamePrefix)sun"
         case 801:
+            if !dayTimeFlag(time: hour, sunriseTime: currentSunriseTime, sunsetTime: currentSunsetTime,
+                            nextDaySunrise: nextDaySunriseTime) {
+                return "\(imageNamePrefix)moon_cloud"
+            }
             return "\(imageNamePrefix)cloud_sun"
         case 802:
             return "\(imageNamePrefix)cloud"
@@ -36,6 +44,13 @@ class HourWeatherCollectionViewCellModel {
         default:
             return "\(imageNamePrefix)sun"
         }
+    }
+    
+    func dayTimeFlag(time: Int, sunriseTime: Int, sunsetTime: Int, nextDaySunrise: Int) -> Bool {
+        if time < sunsetTime && time >= sunriseTime || time > nextDaySunrise {
+            return true
+        }
+        return false
     }
     
     func getTimeFromDate(_ date: Date?) -> String {

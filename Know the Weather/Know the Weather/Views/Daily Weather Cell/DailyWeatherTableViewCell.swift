@@ -14,26 +14,22 @@ class DailyWeatherTableViewCell: UITableViewCell {
     @IBOutlet private weak var dateLabel: UILabel!
     @IBOutlet private weak var conditionImage: UIImageView!
     
-    private let dailyWeatherTableViewCellModel = DailyWeatherTableViewCellModel()
+    private let viewModel = DailyWeatherTableViewCellModel()
     
     static let identifier = "DailyWeatherTableViewCell"
     
     static func nib() -> UINib {
         UINib(nibName: "DailyWeatherTableViewCell", bundle: nil)
     }
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
     
-    func configure(with model: Daily){
+    func configure(with model: Daily, conditionImageString: String){
         highTempLabel.text = "\(model.temp.max)°"
         lowTempLabel.text = "\(model.temp.min)°"
-        dateLabel.text = dailyWeatherTableViewCellModel.getDayFromDate(Date(timeIntervalSince1970: Double(model.time)))
-        conditionImage.image = UIImage(named: dailyWeatherTableViewCellModel.conditionImage(conditionID: model.weather[0].id))
+        dateLabel.text = viewModel.getDayFromDate(Date(timeIntervalSince1970: Double(model.time)))
+        conditionImage.image = UIImage(named: conditionImageString)
     }
 }
