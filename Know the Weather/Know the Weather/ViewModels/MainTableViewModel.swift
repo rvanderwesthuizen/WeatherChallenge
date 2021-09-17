@@ -91,13 +91,6 @@ class MainTableViewModel: NSObject {
         }
     }
     
-    func dayTimeFlag(time: Int, sunriseTime: Int, sunsetTime: Int) -> Bool {
-        if time < sunsetTime && time >= sunriseTime {
-            return true
-        }
-        return false
-    }
-    
     func conditionImage(conditionID: Int, scope: WeatherScope) -> String{
         let imageNamePrefix = "weezle_"
         
@@ -115,20 +108,14 @@ class MainTableViewModel: NSObject {
         case 800:
             switch scope {
             case .current(let model):
-                if !dayTimeFlag(time: model.time, sunriseTime: model.sunrise, sunsetTime: model.sunset) {
-                    return "\(imageNamePrefix)fullmoon"
-                }
-                return "\(imageNamePrefix)sun"
+                return model.isDayTime ? "\(imageNamePrefix)sun" : "\(imageNamePrefix)fullmoon"
             case .daily(_):
                 return "\(imageNamePrefix)sun"
             }
         case 801:
             switch scope {
             case .current(let model):
-                if !dayTimeFlag(time: model.time, sunriseTime: model.sunrise, sunsetTime: model.sunset) {
-                    return "\(imageNamePrefix)moon_cloud"
-                }
-                return "\(imageNamePrefix)cloud_sun"
+                return model.isDayTime ? "\(imageNamePrefix)cloud_sun" : "\(imageNamePrefix)moon_cloud"
             case .daily(_):
                 return "\(imageNamePrefix)cloud_sun"
             }

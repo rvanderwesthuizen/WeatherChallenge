@@ -79,7 +79,7 @@ class MainTableViewController: UITableViewController {
                 break
             }
             guard let current = viewModel.currentWeather else { return }
-            weatherDetailVC.isDay = viewModel.dayTimeFlag(time: current.time, sunriseTime: current.sunrise, sunsetTime: current.sunset)
+            weatherDetailVC.isDay = current.isDayTime
             weatherDetailVC.scope = scope
             weatherDetailVC.chanceOfRainToday = "\(viewModel.dailyWeather[0].chanceOfRain)%"
             navigationController?.pushViewController(weatherDetailVC, animated: true)
@@ -163,9 +163,7 @@ extension MainTableViewController: MainTableViewModelDelegate {
             
             self.setupLabels(with: current)
             
-            if !self.viewModel.dayTimeFlag(time: current.time,
-                                           sunriseTime: current.sunrise,
-                                           sunsetTime: current.sunset) {
+            if current.isDayTime == false {
                 self.tableView.backgroundView = UIImageView(image: #imageLiteral(resourceName: "NightimeBackground"))
             }
             self.activityIndicator.stopAnimating()

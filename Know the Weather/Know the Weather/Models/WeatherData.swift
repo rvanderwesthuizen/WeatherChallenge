@@ -25,6 +25,10 @@ struct Current: Codable {
     let clouds: Double
     let weather: [Weather]
     
+    var isDayTime: Bool {
+        time < sunset && time >= sunrise
+    }
+    
     private enum CodingKeys: String, CodingKey {
         case time = "dt"
         case sunrise = "sunrise"
