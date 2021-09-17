@@ -7,6 +7,7 @@
 
 import XCTest
 @testable import Know_the_Weather
+import CoreLocation
 
 class MainTableViewTest: XCTestCase {
     private let mainTableViewModel = MainTableViewModel()
@@ -18,24 +19,28 @@ class MainTableViewTest: XCTestCase {
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    
+    func testCurrentCityDoesReturnWhenTheCityExists() {
+        mainTableViewModel.currentSelectedLocation = CLLocation(latitude: 37.33233141, longitude: -122.0312186)
+        mainTableViewModel.currentCity { result in
+            switch result {
+            case .success(let city):
+                XCTAssert(city == "Cupertino")
+            case .failure(_):
+                XCTFail()
+            }
         }
     }
     
-    func testDayTimeFlagToReturnTrueWhenTheCurrentTimeIsBetweenSunriseAndSunset() {
-        XCTAssertTrue(mainTableViewModel.dayTimeFlag(time: 1630919482, sunriseTime: 1630901732, sunsetTime: 1630943857))
-    }
-    
-    func testDayTimeFlagToReturnFalseWhenTheCurrentTimeIsNotBetweenSunriseAndSunset() {
-        XCTAssertFalse(mainTableViewModel.dayTimeFlag(time: 1631865850, sunriseTime: 1630901732, sunsetTime: 1630943857))
+    func testCurrentCityCausesErrorWhenTheCityDoesNotExist() {
+        mainTableViewModel.currentSelectedLocation = CLLocation(latitude: 0, longitude: 0)
+        mainTableViewModel.currentCity { result in
+            switch result {
+            case .success(_):
+                XCTFail()
+            case .failure(_):
+                XCTAssertTrue(true)
+            }
+        }
     }
 }
