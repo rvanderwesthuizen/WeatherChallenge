@@ -22,6 +22,7 @@ struct Current: Codable {
     let pressure: Double
     let windSpeed: Double
     let windDeg: Double
+    let clouds: Double
     let weather: [Weather]
     
     private enum CodingKeys: String, CodingKey {
@@ -34,6 +35,7 @@ struct Current: Codable {
         case pressure = "pressure"
         case windSpeed = "wind_speed"
         case windDeg = "wind_deg"
+        case clouds = "clouds"
         case weather = "weather"
     }
 }
@@ -57,24 +59,28 @@ struct Hourly: Codable {
 struct Daily: Codable {
     let time: Int
     let sunrise: Int
+    let sunset: Int
     let temp: Temp
     let feelsLike: Feel
     let humidity: Double
     let pressure: Double
     let windSpeed: Double
     let windDeg: Double
+    let clouds: Double
     let chanceOfRain: Double
     let weather: [Weather]
     
     private enum CodingKeys: String, CodingKey {
         case time = "dt"
         case sunrise = "sunrise"
+        case sunset = "sunset"
         case temp = "temp"
         case feelsLike = "feels_like"
         case humidity = "humidity"
         case pressure = "pressure"
         case windSpeed = "wind_speed"
         case windDeg = "wind_deg"
+        case clouds = "clouds"
         case chanceOfRain = "pop"
         case weather = "weather"
     }

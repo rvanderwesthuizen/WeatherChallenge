@@ -51,7 +51,7 @@ class MainTableViewController: UITableViewController {
     
     @objc private func didTapCurrentWeather() {
         guard let current = viewModel.currentWeather else { return }
-        navigateToWeatherDetailsTableViewController(scope: WeatherScope.current(current), index: 0)
+        navigateToWeatherDetailViewController(scope: WeatherScope.current(current))
     }
     
     @IBAction func didTapLocationButton(_ sender: UIButton) {
@@ -69,35 +69,20 @@ class MainTableViewController: UITableViewController {
         present(navVC, animated: true)
     }
     
-    func navigateToWeatherDetailsTableViewController(scope: WeatherScope, index: Int) {
-        if let weatherDetailTVC = storyboard?.instantiateViewController(identifier: "CurrentWeatherDetail") as? WeatherDetailsTableViewController {
+    func navigateToWeatherDetailViewController(scope: WeatherScope) {
+        if let weatherDetailVC = storyboard?.instantiateViewController(identifier: "WeatherDetail") as? WeatherDetailViewController {
             switch scope {
             case .current(let current):
-                weatherDetailTVC.current = current
-                weatherDetailTVC.conditionImageString = viewModel.conditionImage(conditionID: current.weather[0].id, scope: WeatherScope.current(current))
+                weatherDetailVC.conditionImageString = viewModel.conditionImage(conditionID: current.weather[0].id, scope: WeatherScope.current(current))
             case .daily(let day):
-                weatherDetailTVC.conditionImageString = viewModel.conditionImage(conditionID: day.weather[0].id, scope: WeatherScope.daily(day))
+                weatherDetailVC.conditionImageString = viewModel.conditionImage(conditionID: day.weather[0].id, scope: WeatherScope.daily(day))
                 break
             }
-            weatherDetailTVC.daily = viewModel.dailyWeather
-            weatherDetailTVC.index = index
             guard let current = viewModel.currentWeather else { return }
-            weatherDetailTVC.isDay = viewModel.dayTimeFlag(time: current.time, sunriseTime: current.sunrise, sunsetTime: current.sunset)
-            weatherDetailTVC.scope = scope
-            navigationController?.pushViewController(weatherDetailTVC, animated: true)
-        }
-    }
-    
-    func navigateToWeatherDetailsTableViewControllerWithDailyWeatherAtIndex(_ index: Int) {
-        if let weatherDetailTVC = storyboard?.instantiateViewController(identifier: "CurrentWeatherDetail") as? WeatherDetailsTableViewController {
-            
-            let daily = viewModel.dailyWeather
-            
-            
-            weatherDetailTVC.conditionImageString = viewModel.conditionImage(
-                conditionID: daily[index].weather[0].id
-                , scope: WeatherScope.daily(daily[index]))
-            navigationController?.pushViewController(weatherDetailTVC, animated: true)
+            weatherDetailVC.isDay = viewModel.dayTimeFlag(time: current.time, sunriseTime: current.sunrise, sunsetTime: current.sunset)
+            weatherDetailVC.scope = scope
+            weatherDetailVC.chanceOfRainToday = "\(viewModel.dailyWeather[0].chanceOfRain)%"
+            navigationController?.pushViewController(weatherDetailVC, animated: true)
         }
     }
     
@@ -163,7 +148,7 @@ class MainTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
-        navigateToWeatherDetailsTableViewController(scope: WeatherScope.daily(viewModel.dailyWeather[indexPath.row]), index: indexPath.row)
+        navigateToWeatherDetailViewController(scope: WeatherScope.daily(viewModel.dailyWeather[indexPath.row]))
     }
     
 }
