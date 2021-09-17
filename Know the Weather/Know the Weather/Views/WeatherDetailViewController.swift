@@ -13,6 +13,8 @@ class WeatherDetailViewController: UIViewController {
     var conditionImageString: String?
     var chanceOfRainToday: String?
     
+    private let viewModel = WeatherDetailViewModel()
+    
     @IBOutlet private weak var conditionImageView: UIImageView!
     @IBOutlet private weak var tempLabel: UILabel!
     @IBOutlet private weak var feelsLikeLabel: UILabel!
@@ -41,65 +43,39 @@ class WeatherDetailViewController: UIViewController {
     private func setupHeaderLabels(with imageString: String) {
         switch scope {
         case .current(let current):
-                        title = getTitleFromDate(Date(timeIntervalSince1970: Double(current.time)))
-            tempLabel.text = "\(current.temp)°"
-            feelsLikeLabel.text = "Feels: \(current.feelsLike)°"
-            summaryLabel.text = current.weather[0].description
+            title = viewModel.getTitleFromDate(Date(timeIntervalSince1970: Double(current.time)))
             conditionImageView.image = UIImage(named: imageString)
+            viewModel.setupHeaderLabelsText(with: current)
         case .daily(let dayWeather):
-                        title = getTitleFromDate(Date(timeIntervalSince1970: Double(dayWeather.time)))
-            tempLabel.text = "\(dayWeather.temp.day)°"
-            feelsLikeLabel.text = "FeelsLike: \(dayWeather.feelsLike.day)°"
-            summaryLabel.text = dayWeather.weather[0].description
+            title = viewModel.getTitleFromDate(Date(timeIntervalSince1970: Double(dayWeather.time)))
             conditionImageView.image = UIImage(named: imageString)
+            viewModel.setupHeaderLabelsText(with: dayWeather)
         case .none:
             return
         }
+        tempLabel.text = viewModel.tempInfo
+        feelsLikeLabel.text = viewModel.feelsLikeInfo
+        summaryLabel.text = viewModel.summary
     }
     
     private func setupInfoLabels() {
         switch scope {
         case .current(let weatherInfo):
-            feelsLikeInfoLabel.text = "\((weatherInfo).feelsLike)°"
-            windInfoLabel.text = "\(windDirectionFromDeg(weatherInfo.windDeg)) \(weatherInfo.windSpeed)m/s"
-            pressureInfoLabel.text = "\(weatherInfo.pressure)"
-            chanceOfRainInfoLabel.text = chanceOfRainToday!
-            humidityInfoLabel.text = "\(weatherInfo.humidity)%"
-            cloudsInfoLabel.text = "\(weatherInfo.clouds)%"
-            sunriseInfoLabel.text = getTimeForSun(Date(timeIntervalSince1970: Double(weatherInfo.sunrise)))
-            sunsetInfoLabel.text = getTimeForSun(Date(timeIntervalSince1970: Double(weatherInfo.sunset)))
-            
+            viewModel.setupInfoLabelsText(with: weatherInfo, chanceOfRain: chanceOfRainToday!)
         case .daily(let weatherInfo):
-            feelsLikeInfoLabel.text = "\(weatherInfo.feelsLike.day)°"
-            windInfoLabel.text = "\(windDirectionFromDeg(weatherInfo.windDeg)) \(weatherInfo.windSpeed)m/s"
-            pressureInfoLabel.text = "\(weatherInfo.pressure)"
-            chanceOfRainInfoLabel.text = "\(weatherInfo.chanceOfRain)%"
-            humidityInfoLabel.text = "\(weatherInfo.humidity)%"
-            cloudsInfoLabel.text = "\(weatherInfo.clouds)%"
-            sunriseInfoLabel.text = getTimeForSun(Date(timeIntervalSince1970: Double(weatherInfo.sunrise)))
-            sunsetInfoLabel.text = getTimeForSun(Date(timeIntervalSince1970: Double(weatherInfo.sunset)))
+            viewModel.setupInfoLabelsText(with: weatherInfo)
         case .none:
             return
         }
-    }
-    
-    private func getTimeForSun(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.dateFormat = "HH:mm"
-        return formatter.string(from: date)
-    }
-    
-    private func getTitleFromDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.dateFormat = "EEEE, MMM d"
-        return formatter.string(from: date)
-    }
-    
-    private func windDirectionFromDeg(_ degrees : Double) -> String {
-        let directions = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"]
-        let i: Int = Int((degrees + 11.25)/22.5)
-        return directions[i % 16]
+        
+        feelsLikeInfoLabel.text = viewModel.feelsLikeInfo
+        windInfoLabel.text = viewModel.windInfo
+        pressureInfoLabel.text = viewModel.pressureInfo
+        chanceOfRainInfoLabel.text = viewModel.chanceOfRainInfo
+        humidityInfoLabel.text = viewModel.humidityInfo
+        cloudsInfoLabel.text = viewModel.cloudsInfo
+        sunriseInfoLabel.text = viewModel.sunriseInfo
+        sunsetInfoLabel.text = viewModel.sunsetInfo
+        
     }
 }
