@@ -35,5 +35,7 @@ class MainTableViewTest: XCTestCase {
         XCTAssertTrue(mainTableViewModel.dayTimeFlag(time: 1630919482, sunriseTime: 1630901732, sunsetTime: 1630943857))
     }
     
-
+    func testDayTimeFlagToReturnFalseWhenTheCurrentTimeIsNotBetweenSunriseAndSunset() {
+        XCTAssertFalse(mainTableViewModel.dayTimeFlag(time: 1631865850, sunriseTime: 1630901732, sunsetTime: 1630943857))
+    }
 }

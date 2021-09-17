@@ -94,8 +94,6 @@ class MainTableViewModel: NSObject {
     func dayTimeFlag(time: Int, sunriseTime: Int, sunsetTime: Int) -> Bool {
         if time < sunsetTime && time >= sunriseTime {
             return true
-        } else if time > sunriseTime{
-            return true
         }
         return false
     }
