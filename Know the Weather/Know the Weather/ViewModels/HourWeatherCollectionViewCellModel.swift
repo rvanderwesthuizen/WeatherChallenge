@@ -53,14 +53,7 @@ class HourWeatherCollectionViewCellModel {
         return false
     }
     
-    func getTimeFromDate(_ date: Date?) -> String {
-        guard let inputDate = date else {
-            return ""
-        }
-        
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.dateFormat = "HH:mm"
-        return formatter.string(from: inputDate)
+    func getTimeFromDate(_ date: Date) -> String {
+        DateFormatter.time.string(from: date)
     }
 }

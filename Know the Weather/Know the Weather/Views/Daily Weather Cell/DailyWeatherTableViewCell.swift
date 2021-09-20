@@ -14,8 +14,6 @@ class DailyWeatherTableViewCell: UITableViewCell {
     @IBOutlet private weak var dateLabel: UILabel!
     @IBOutlet private weak var conditionImage: UIImageView!
     
-    private let viewModel = DailyWeatherTableViewCellModel()
-    
     static let identifier = "DailyWeatherTableViewCell"
     
     static func nib() -> UINib {
@@ -29,7 +27,7 @@ class DailyWeatherTableViewCell: UITableViewCell {
     func configure(with model: Daily, conditionImageString: String){
         highTempLabel.text = "\(model.temp.max)°"
         lowTempLabel.text = "\(model.temp.min)°"
-        dateLabel.text = viewModel.getDayFromDate(Date(timeIntervalSince1970: Double(model.time)))
+        dateLabel.text = DateFormatter.weekday.string(from: (Date(timeIntervalSince1970: Double(model.time))))
         conditionImage.image = UIImage(named: conditionImageString)
     }
 }

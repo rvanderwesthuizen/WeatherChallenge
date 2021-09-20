@@ -26,8 +26,8 @@ class WeatherDetailViewModel {
         chanceOfRainInfo = chanceOfRain
         humidityInfo = "\(current.humidity)%"
         cloudsInfo = "\(current.clouds)%"
-        sunriseInfo = getTimeForSun(Date(timeIntervalSince1970: Double(current.sunrise)))
-        sunsetInfo = getTimeForSun(Date(timeIntervalSince1970: Double(current.sunset)))
+        sunriseInfo = getTimeFormDate(Date(timeIntervalSince1970: Double(current.sunrise)))
+        sunsetInfo = getTimeFormDate(Date(timeIntervalSince1970: Double(current.sunset)))
     }
     
     func setupInfoLabelsText(with day: Daily) {
@@ -37,8 +37,8 @@ class WeatherDetailViewModel {
         chanceOfRainInfo = "\(day.chanceOfRain)%"
         humidityInfo = "\(day.humidity)%"
         cloudsInfo = "\(day.clouds)%"
-        sunriseInfo = getTimeForSun(Date(timeIntervalSince1970: Double(day.sunrise)))
-        sunsetInfo = getTimeForSun(Date(timeIntervalSince1970: Double(day.sunset)))
+        sunriseInfo = getTimeFormDate(Date(timeIntervalSince1970: Double(day.sunrise)))
+        sunsetInfo = getTimeFormDate(Date(timeIntervalSince1970: Double(day.sunset)))
     }
     
     func setupHeaderLabelsText(with current: Current) {
@@ -53,18 +53,12 @@ class WeatherDetailViewModel {
         tempInfo = "\(dayWeather.temp.day)°"
     }
     
-    private func getTimeForSun(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.dateFormat = "HH:mm"
-        return formatter.string(from: date)
+    private func getTimeFormDate(_ date: Date) -> String {
+        DateFormatter.time.string(from: date)
     }
     
     func getTitleFromDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.dateFormat = "EEEE, MMM d"
-        return formatter.string(from: date)
+        DateFormatter.dayAndDate.string(from: date)
     }
     
     private func windDirectionFromDeg(_ degrees : Double) -> String {

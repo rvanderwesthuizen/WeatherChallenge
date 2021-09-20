@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C91A336126F335C700942340 /* WeatherScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91A336026F335C700942340 /* WeatherScope.swift */; };
+		C91A336126F335C700942340 /* GlobalStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91A336026F335C700942340 /* GlobalStorage.swift */; };
 		C91A336826F3900C00942340 /* WeatherDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91A336726F3900C00942340 /* WeatherDetailViewController.swift */; };
 		C91A336A26F4759300942340 /* WeatherDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91A336926F4759300942340 /* WeatherDetailViewModel.swift */; };
 		C96F47E226D8F0D7005553EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C96F47E126D8F0D7005553EE /* AppDelegate.swift */; };
@@ -25,7 +25,6 @@
 		C986444426E1F19600CEA8FE /* HourlyWeatherTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C986444226E1F19600CEA8FE /* HourlyWeatherTableViewCell.xib */; };
 		C986444A26E1F43F00CEA8FE /* HourWeatherCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C986444826E1F43F00CEA8FE /* HourWeatherCollectionViewCell.swift */; };
 		C986444B26E1F43F00CEA8FE /* HourWeatherCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C986444926E1F43F00CEA8FE /* HourWeatherCollectionViewCell.xib */; };
-		C986444D26E5E5A900CEA8FE /* DailyWeatherTableViewCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C986444C26E5E5A900CEA8FE /* DailyWeatherTableViewCellModel.swift */; };
 		C986445126E5E92500CEA8FE /* HourWeatherCollectionViewCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C986445026E5E92500CEA8FE /* HourWeatherCollectionViewCellModel.swift */; };
 		C986445326E6015A00CEA8FE /* LocationsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C986445226E6015A00CEA8FE /* LocationsTableViewController.swift */; };
 		C986445526E6061200CEA8FE /* LocationsTableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C986445426E6061200CEA8FE /* LocationsTableViewModel.swift */; };
@@ -47,7 +46,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		C91A336026F335C700942340 /* WeatherScope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherScope.swift; sourceTree = "<group>"; };
+		C91A336026F335C700942340 /* GlobalStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalStorage.swift; sourceTree = "<group>"; };
 		C91A336726F3900C00942340 /* WeatherDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailViewController.swift; sourceTree = "<group>"; };
 		C91A336926F4759300942340 /* WeatherDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailViewModel.swift; sourceTree = "<group>"; };
 		C96F47DE26D8F0D7005553EE /* Know the Weather.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Know the Weather.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -69,7 +68,6 @@
 		C986444226E1F19600CEA8FE /* HourlyWeatherTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HourlyWeatherTableViewCell.xib; sourceTree = "<group>"; };
 		C986444826E1F43F00CEA8FE /* HourWeatherCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourWeatherCollectionViewCell.swift; sourceTree = "<group>"; };
 		C986444926E1F43F00CEA8FE /* HourWeatherCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HourWeatherCollectionViewCell.xib; sourceTree = "<group>"; };
-		C986444C26E5E5A900CEA8FE /* DailyWeatherTableViewCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyWeatherTableViewCellModel.swift; sourceTree = "<group>"; };
 		C986445026E5E92500CEA8FE /* HourWeatherCollectionViewCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourWeatherCollectionViewCellModel.swift; sourceTree = "<group>"; };
 		C986445226E6015A00CEA8FE /* LocationsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsTableViewController.swift; sourceTree = "<group>"; };
 		C986445426E6061200CEA8FE /* LocationsTableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsTableViewModel.swift; sourceTree = "<group>"; };
@@ -144,7 +142,6 @@
 			isa = PBXGroup;
 			children = (
 				C986443526E0BB7400CEA8FE /* MainTableViewModel.swift */,
-				C986444C26E5E5A900CEA8FE /* DailyWeatherTableViewCellModel.swift */,
 				C986445026E5E92500CEA8FE /* HourWeatherCollectionViewCellModel.swift */,
 				C986445426E6061200CEA8FE /* LocationsTableViewModel.swift */,
 				C91A336926F4759300942340 /* WeatherDetailViewModel.swift */,
@@ -160,7 +157,7 @@
 				C986445626E6075D00CEA8FE /* Constants.swift */,
 				C986445C26E61C5100CEA8FE /* Location.swift */,
 				C986445F26E6237A00CEA8FE /* PlistHandler.swift */,
-				C91A336026F335C700942340 /* WeatherScope.swift */,
+				C91A336026F335C700942340 /* GlobalStorage.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -320,9 +317,8 @@
 				C96F47E426D8F0D7005553EE /* SceneDelegate.swift in Sources */,
 				C986446026E6237A00CEA8FE /* PlistHandler.swift in Sources */,
 				C91A336826F3900C00942340 /* WeatherDetailViewController.swift in Sources */,
-				C91A336126F335C700942340 /* WeatherScope.swift in Sources */,
+				C91A336126F335C700942340 /* GlobalStorage.swift in Sources */,
 				C986443626E0BB7400CEA8FE /* MainTableViewModel.swift in Sources */,
-				C986444D26E5E5A900CEA8FE /* DailyWeatherTableViewCellModel.swift in Sources */,
 				C986444A26E1F43F00CEA8FE /* HourWeatherCollectionViewCell.swift in Sources */,
 				C986445326E6015A00CEA8FE /* LocationsTableViewController.swift in Sources */,
 				C986445126E5E92500CEA8FE /* HourWeatherCollectionViewCellModel.swift in Sources */,
