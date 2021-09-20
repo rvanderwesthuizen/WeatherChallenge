@@ -27,6 +27,7 @@ class MainTableViewModel: NSObject {
     var dailyWeather = [Daily]()
     var hourlyWeather = [Hourly]()
     var currentSelectedLocation: CLLocation?
+    var scope: WeatherScope?
     
     //MARK: - Calculated Variables
     var dailyCount: Int {
@@ -91,8 +92,18 @@ class MainTableViewModel: NSObject {
         }
     }
     
-    func conditionImage(conditionID: Int, scope: WeatherScope) -> String{
+    func conditionImage() -> String{
         let imageNamePrefix = "weezle_"
+        
+        var conditionID: Int
+        switch scope {
+        case .current(_):
+            conditionID = currentWeatherConditionID()
+        case .daily(let day):
+            conditionID = day.weather[0].id
+        case .none:
+            return "\(imageNamePrefix)sun"
+        }
         
         switch conditionID {
         case 200...232:
@@ -111,6 +122,8 @@ class MainTableViewModel: NSObject {
                 return model.isDayTime ? "\(imageNamePrefix)sun" : "\(imageNamePrefix)fullmoon"
             case .daily(_):
                 return "\(imageNamePrefix)sun"
+            case .none:
+                return "\(imageNamePrefix)sun"
             }
         case 801:
             switch scope {
@@ -118,6 +131,8 @@ class MainTableViewModel: NSObject {
                 return model.isDayTime ? "\(imageNamePrefix)cloud_sun" : "\(imageNamePrefix)moon_cloud"
             case .daily(_):
                 return "\(imageNamePrefix)cloud_sun"
+            case .none:
+                return "\(imageNamePrefix)sun"
             }
         case 802:
             return "\(imageNamePrefix)cloud"
@@ -194,3 +209,41 @@ extension MainTableViewModel: CLLocationManagerDelegate{
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         delegate?.didFailWithError(errorString: "An error occurred while retrieving location data.", error: error)
     }}
+
+extension MainTableViewModel {
+    #warning("Make the indexes safe")
+    
+    //MARK: - DailyWeather
+    func dailyWeather(at index: Int) -> Daily {
+        dailyWeather[index]
+    }
+    
+    func dailyWeatherConditionID(at index: Int) -> Int {
+        dailyWeather[index].weather[0].id
+    }
+    
+    func dailyWeatherSunrise(at index: Int) -> Int {
+        dailyWeather[index].sunrise
+    }
+    
+    //MARK: - CurrentWeather
+    func currentWeatherConditionID() -> Int {
+        currentWeather!.weather[0].id
+    }
+    
+    func chanceOfRainToday() -> Double {
+        dailyWeather[0].chanceOfRain
+    }
+    
+    func isDay() -> Bool {
+        currentWeather!.isDayTime
+    }
+    
+    func currentWeatherDescription() -> String {
+        currentWeather!.weather[0].description
+    }
+    
+    func currentTemp() -> String {
+        "\(currentWeather!.temp)°"
+    }
+}

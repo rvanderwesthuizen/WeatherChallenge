@@ -51,7 +51,8 @@ class MainTableViewController: UITableViewController {
     
     @objc private func didTapCurrentWeather() {
         guard let current = viewModel.currentWeather else { return }
-        navigateToWeatherDetailViewController(scope: WeatherScope.current(current))
+        viewModel.scope = WeatherScope.current(current)
+        navigateToWeatherDetailViewController()
     }
     
     @IBAction func didTapLocationButton(_ sender: UIButton) {
@@ -69,19 +70,12 @@ class MainTableViewController: UITableViewController {
         present(navVC, animated: true)
     }
     
-    func navigateToWeatherDetailViewController(scope: WeatherScope) {
+    func navigateToWeatherDetailViewController() {
         if let weatherDetailVC = storyboard?.instantiateViewController(identifier: "WeatherDetail") as? WeatherDetailViewController {
-            switch scope {
-            case .current(let current):
-                weatherDetailVC.conditionImageString = viewModel.conditionImage(conditionID: current.weather[0].id, scope: WeatherScope.current(current))
-            case .daily(let day):
-                weatherDetailVC.conditionImageString = viewModel.conditionImage(conditionID: day.weather[0].id, scope: WeatherScope.daily(day))
-                break
-            }
-            guard let current = viewModel.currentWeather else { return }
-            weatherDetailVC.isDay = current.isDayTime
-            weatherDetailVC.scope = scope
-            weatherDetailVC.chanceOfRainToday = "\(viewModel.dailyWeather[0].chanceOfRain)%"
+            weatherDetailVC.conditionImageString = viewModel.conditionImage()
+            weatherDetailVC.isDay = viewModel.isDay()
+            weatherDetailVC.scope = viewModel.scope
+            weatherDetailVC.chanceOfRainToday = "\(viewModel.chanceOfRainToday())%"
             navigationController?.pushViewController(weatherDetailVC, animated: true)
         }
     }
@@ -91,9 +85,9 @@ class MainTableViewController: UITableViewController {
         activityIndicator.startAnimating()
     }
     
-    private func setupLabels(with current: Current) {
-        self.currentTempLabel.text = "\(current.temp)°"
-        self.summaryLabel.text = current.weather[0].description
+    private func setupLabels() {
+        self.currentTempLabel.text = viewModel.currentTemp()
+        self.summaryLabel.text = viewModel.currentWeatherDescription()
         
         self.viewModel.currentCity() { result in
             switch result {
@@ -132,12 +126,13 @@ class MainTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: HourlyWeatherTableViewCell.identifier, for: indexPath) as! HourlyWeatherTableViewCell
-            guard let current = viewModel.currentWeather else { return cell}
-            cell.configure(with: viewModel.hourlyWeather, current: current, nextDaySunrise: viewModel.dailyWeather[1].sunrise)
+            guard let current = viewModel.currentWeather else { return UITableViewCell()}
+            cell.configure(with: viewModel.hourlyWeather, current: current, nextDaySunrise: viewModel.dailyWeatherSunrise(at: 1))
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: DailyWeatherTableViewCell.identifier, for: indexPath) as! DailyWeatherTableViewCell
-            cell.configure(with: viewModel.dailyWeather[indexPath.row], conditionImageString: viewModel.conditionImage(conditionID: viewModel.dailyWeather[indexPath.row].weather[0].id, scope: WeatherScope.daily(viewModel.dailyWeather[indexPath.row])))
+            viewModel.scope = WeatherScope.daily(viewModel.dailyWeather(at: indexPath.row))
+            cell.configure(with: viewModel.dailyWeather[indexPath.row], conditionImageString: viewModel.conditionImage())
             return cell
         }
     }
@@ -148,7 +143,8 @@ class MainTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
-        navigateToWeatherDetailViewController(scope: WeatherScope.daily(viewModel.dailyWeather[indexPath.row]))
+        viewModel.scope = WeatherScope.daily(viewModel.dailyWeather(at: indexPath.row))
+        navigateToWeatherDetailViewController()
     }
     
 }
@@ -158,10 +154,10 @@ extension MainTableViewController: MainTableViewModelDelegate {
         DispatchQueue.main.async {
             self.tableView.reloadData()
             guard let current = self.viewModel.currentWeather else { return }
+            self.viewModel.scope = WeatherScope.current(current)
+            self.conditionImage.image = UIImage(named: self.viewModel.conditionImage())
             
-            self.conditionImage.image = UIImage(named: self.viewModel.conditionImage(conditionID: current.weather[0].id, scope: WeatherScope.current(current)))
-            
-            self.setupLabels(with: current)
+            self.setupLabels()
             
             if current.isDayTime == false {
                 self.tableView.backgroundView = UIImageView(image: #imageLiteral(resourceName: "NightimeBackground"))
