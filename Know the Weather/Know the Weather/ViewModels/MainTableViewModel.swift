@@ -97,8 +97,8 @@ class MainTableViewModel: NSObject {
         
         var conditionID: Int
         switch scope {
-        case .current(_):
-            conditionID = currentWeatherConditionID()
+        case .current(let current):
+            conditionID =  current.weather[0].id
         case .daily(let day):
             conditionID = day.weather[0].id
         case .none:
@@ -218,21 +218,12 @@ extension MainTableViewModel {
         return day
     }
     
-    func dailyWeatherConditionID(at index: Int) -> Int? {
-        guard let day = dailyWeather[safe: index] else { return 0 }
-        return day.weather[0].id
-    }
-    
     func dailyWeatherSunrise(at index: Int) -> Int? {
         guard let day = dailyWeather[safe: index] else { return 0 }
         return day.sunrise
     }
     
     //MARK: - CurrentWeather
-    func currentWeatherConditionID() -> Int {
-        guard let current = currentWeather else { return 0 }
-        return current.weather[0].id
-    }
     
     func chanceOfRainToday() -> Double {
         dailyWeather[0].chanceOfRain
