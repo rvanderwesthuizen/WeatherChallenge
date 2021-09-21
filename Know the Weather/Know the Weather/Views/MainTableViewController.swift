@@ -127,12 +127,14 @@ class MainTableViewController: UITableViewController {
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: HourlyWeatherTableViewCell.identifier, for: indexPath) as! HourlyWeatherTableViewCell
             guard let current = viewModel.currentWeather else { return UITableViewCell()}
-            cell.configure(with: viewModel.hourlyWeather, current: current, nextDaySunrise: viewModel.dailyWeatherSunrise(at: 1))
+            guard let daySunrise = viewModel.dailyWeatherSunrise(at: 1) else { return UITableViewCell() }
+            cell.configure(with: viewModel.hourlyWeather, current: current, nextDaySunrise: daySunrise)
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: DailyWeatherTableViewCell.identifier, for: indexPath) as! DailyWeatherTableViewCell
-            viewModel.scope = WeatherScope.daily(viewModel.dailyWeather(at: indexPath.row))
-            cell.configure(with: viewModel.dailyWeather[indexPath.row], conditionImageString: viewModel.conditionImage())
+            guard let weather = viewModel.dailyWeather(at: indexPath.row) else { return UITableViewCell() }
+            viewModel.scope = WeatherScope.daily(weather)
+            cell.configure(with: weather, conditionImageString: viewModel.conditionImage())
             return cell
         }
     }
@@ -143,7 +145,8 @@ class MainTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
-        viewModel.scope = WeatherScope.daily(viewModel.dailyWeather(at: indexPath.row))
+        guard let day = viewModel.dailyWeather(at: indexPath.row) else { return }
+        viewModel.scope = WeatherScope.daily(day)
         navigateToWeatherDetailViewController()
     }
     

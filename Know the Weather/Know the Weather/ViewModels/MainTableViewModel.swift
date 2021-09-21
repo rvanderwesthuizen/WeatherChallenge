@@ -211,24 +211,27 @@ extension MainTableViewModel: CLLocationManagerDelegate{
     }}
 
 extension MainTableViewModel {
-    #warning("Make the indexes safe")
     
     //MARK: - DailyWeather
-    func dailyWeather(at index: Int) -> Daily {
-        dailyWeather[index]
+    func dailyWeather(at index: Int) -> Daily? {
+        guard let day = dailyWeather[safe: index] else { return nil }
+        return day
     }
     
-    func dailyWeatherConditionID(at index: Int) -> Int {
-        dailyWeather[index].weather[0].id
+    func dailyWeatherConditionID(at index: Int) -> Int? {
+        guard let day = dailyWeather[safe: index] else { return 0 }
+        return day.weather[0].id
     }
     
-    func dailyWeatherSunrise(at index: Int) -> Int {
-        dailyWeather[index].sunrise
+    func dailyWeatherSunrise(at index: Int) -> Int? {
+        guard let day = dailyWeather[safe: index] else { return 0 }
+        return day.sunrise
     }
     
     //MARK: - CurrentWeather
     func currentWeatherConditionID() -> Int {
-        currentWeather!.weather[0].id
+        guard let current = currentWeather else { return 0 }
+        return current.weather[0].id
     }
     
     func chanceOfRainToday() -> Double {
@@ -236,14 +239,17 @@ extension MainTableViewModel {
     }
     
     func isDay() -> Bool {
-        currentWeather!.isDayTime
+        guard let current = currentWeather else { return true }
+        return current.isDayTime
     }
     
     func currentWeatherDescription() -> String {
-        currentWeather!.weather[0].description
+        guard let current = currentWeather else { return "" }
+        return current.weather[0].description
     }
     
     func currentTemp() -> String {
-        "\(currentWeather!.temp)°"
+        guard let current = currentWeather else { return "" }
+        return "\(current.temp)°"
     }
 }
