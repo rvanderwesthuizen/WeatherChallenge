@@ -1,16 +1,11 @@
 //
-//  GlobalEnums.swift
+//  GlobalExtentions.swift
 //  Know the Weather
 //
-//  Created by Ruan van der Westhuizen on 2021/09/16.
+//  Created by Ruan van der Westhuizen on 2021/09/20.
 //
 
 import Foundation
-
-enum WeatherScope {
-    case current(Current)
-    case daily(Daily)
-}
 
 extension DateFormatter {
     private static let formatter = DateFormatter()
@@ -30,4 +25,10 @@ extension DateFormatter {
         return formatter
     }()
     
+}
+
+extension Collection {
+    subscript(safe index: Index) -> Element? {
+        return indices.contains(index) ? self[index] : nil
+    }
 }
