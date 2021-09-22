@@ -73,9 +73,9 @@ class MainTableViewController: UITableViewController {
     func navigateToWeatherDetailViewController() {
         if let weatherDetailVC = storyboard?.instantiateViewController(identifier: "WeatherDetail") as? WeatherDetailViewController {
             weatherDetailVC.conditionImageString = viewModel.conditionImage()
-            weatherDetailVC.isDay = viewModel.isDay()
+            weatherDetailVC.isDay = viewModel.isDayTime
             weatherDetailVC.scope = viewModel.scope
-            weatherDetailVC.chanceOfRainToday = "\(viewModel.chanceOfRainToday())%"
+            weatherDetailVC.chanceOfRainToday = "\(viewModel.persentageChanceOfRain)%"
             navigationController?.pushViewController(weatherDetailVC, animated: true)
         }
     }
@@ -86,8 +86,8 @@ class MainTableViewController: UITableViewController {
     }
     
     private func setupLabels() {
-        self.currentTempLabel.text = viewModel.currentTemp()
-        self.summaryLabel.text = viewModel.currentWeatherDescription()
+        self.currentTempLabel.text = viewModel.currentTemp
+        self.summaryLabel.text = viewModel.currentWeatherDescription
         
         self.viewModel.currentCity() { result in
             switch result {

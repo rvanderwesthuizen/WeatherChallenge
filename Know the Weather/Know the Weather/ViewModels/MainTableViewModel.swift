@@ -120,19 +120,15 @@ class MainTableViewModel: NSObject {
             switch scope {
             case .current(let model):
                 return model.isDayTime ? "\(imageNamePrefix)sun" : "\(imageNamePrefix)fullmoon"
-            case .daily(_):
-                return "\(imageNamePrefix)sun"
-            case .none:
+            case .daily(_), .none:
                 return "\(imageNamePrefix)sun"
             }
         case 801:
             switch scope {
             case .current(let model):
                 return model.isDayTime ? "\(imageNamePrefix)cloud_sun" : "\(imageNamePrefix)moon_cloud"
-            case .daily(_):
+            case .daily(_), .none:
                 return "\(imageNamePrefix)cloud_sun"
-            case .none:
-                return "\(imageNamePrefix)sun"
             }
         case 802:
             return "\(imageNamePrefix)cloud"
@@ -214,32 +210,29 @@ extension MainTableViewModel {
     
     //MARK: - DailyWeather
     func dailyWeather(at index: Int) -> Daily? {
-        guard let day = dailyWeather[safe: index] else { return nil }
-        return day
+        dailyWeather[safe: index]
     }
     
     func dailyWeatherSunrise(at index: Int) -> Int? {
-        guard let day = dailyWeather[safe: index] else { return 0 }
-        return day.sunrise
+        dailyWeather[safe: index]?.sunrise
     }
     
     //MARK: - CurrentWeather
-    
-    func chanceOfRainToday() -> Double {
+    var persentageChanceOfRain: Double {
         dailyWeather[0].chanceOfRain
     }
     
-    func isDay() -> Bool {
+    var isDayTime: Bool {
         guard let current = currentWeather else { return true }
         return current.isDayTime
     }
     
-    func currentWeatherDescription() -> String {
+    var currentWeatherDescription: String {
         guard let current = currentWeather else { return "" }
         return current.weather[0].description
     }
     
-    func currentTemp() -> String {
+    var currentTemp: String {
         guard let current = currentWeather else { return "" }
         return "\(current.temp)°"
     }
