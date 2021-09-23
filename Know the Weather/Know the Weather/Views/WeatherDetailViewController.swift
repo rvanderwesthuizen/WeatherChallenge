@@ -33,7 +33,7 @@ class WeatherDetailViewController: UIViewController {
         
         guard let dayTimeCheck = isDay else { return }
         guard let imageString = conditionImageString else { return }
-        view.backgroundColor = (dayTimeCheck ? UIColor(patternImage: #imageLiteral(resourceName: "DaytimeBackground")) : UIColor(patternImage: #imageLiteral(resourceName: "NightimeBackground")))
+        view.backgroundColor = (dayTimeCheck ? UIColor(patternImage: #imageLiteral(resourceName: "DaytimeBackground")) : UIColor(patternImage: #imageLiteral(resourceName: "NighttimeBackground")))
         
         setupHeaderLabels(with: imageString)
         setupInfoLabels()

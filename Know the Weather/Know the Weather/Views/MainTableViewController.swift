@@ -75,7 +75,7 @@ class MainTableViewController: UITableViewController {
             weatherDetailVC.conditionImageString = viewModel.conditionImage()
             weatherDetailVC.isDay = viewModel.isDayTime
             weatherDetailVC.scope = viewModel.scope
-            weatherDetailVC.chanceOfRainToday = "\(viewModel.persentageChanceOfRain)%"
+            weatherDetailVC.chanceOfRainToday = "\(viewModel.percentageChanceOfRain)%"
             navigationController?.pushViewController(weatherDetailVC, animated: true)
         }
     }
@@ -163,7 +163,7 @@ extension MainTableViewController: MainTableViewModelDelegate {
             self.setupLabels()
             
             if current.isDayTime == false {
-                self.tableView.backgroundView = UIImageView(image: #imageLiteral(resourceName: "NightimeBackground"))
+                self.tableView.backgroundView = UIImageView(image: #imageLiteral(resourceName: "NighttimeBackground"))
             }
             self.activityIndicator.stopAnimating()
             self.tableView.refreshControl?.endRefreshing()

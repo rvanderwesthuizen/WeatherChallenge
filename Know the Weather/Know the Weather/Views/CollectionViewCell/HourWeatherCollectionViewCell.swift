@@ -22,7 +22,7 @@ class HourWeatherCollectionViewCell: UICollectionViewCell {
     }
     
     func configure(with model: Hourly, currentSunriseTime: Int, currentSunsetTime: Int, nextDaySunriseTime: Int) {
-        tempLabel.text = "\(model.temp)°"
+        tempLabel.text = "\(Measurement(value: model.temp, unit: UnitTemperature.celsius))"
         timestampLabel.text = viewModel.getTimeFromDate(Date(timeIntervalSince1970: Double(model.time)))
         conditionImage.contentMode = .scaleAspectFit
         conditionImage.image = UIImage(named: viewModel.conditionImage(

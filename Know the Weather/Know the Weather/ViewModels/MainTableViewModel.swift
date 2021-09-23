@@ -218,7 +218,7 @@ extension MainTableViewModel {
     }
     
     //MARK: - CurrentWeather
-    var persentageChanceOfRain: Double {
+    var percentageChanceOfRain: Double {
         dailyWeather[0].chanceOfRain
     }
     
@@ -234,6 +234,7 @@ extension MainTableViewModel {
     
     var currentTemp: String {
         guard let current = currentWeather else { return "" }
-        return "\(current.temp)°"
+        
+        return "\(Measurement(value: current.temp, unit: UnitTemperature.celsius))"
     }
 }
