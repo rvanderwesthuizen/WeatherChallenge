@@ -8,6 +8,7 @@
 import Foundation
 import CoreLocation
 import MapKit
+import UserNotifications
 
 protocol MainTableViewModelDelegate {
     func didFetchWeather(_ weather: WeatherData)
@@ -37,6 +38,7 @@ class MainTableViewModel: NSObject {
     override init() {
         super.init()
         setupLocation()
+        setupLocalNotification()
     }
     
     func fetchLastKnownLocation(completion: @escaping (Result<Location, Error>) -> Void) {
@@ -236,5 +238,42 @@ extension MainTableViewModel {
         guard let current = currentWeather else { return "" }
         
         return "\(Measurement(value: current.temp, unit: UnitTemperature.celsius))"
+    }
+}
+
+//MARK: - Local Notifications
+extension MainTableViewModel {
+    private func setupLocalNotification() {
+        let center = UNUserNotificationCenter.current()
+        
+        center.requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
+            if error != nil {
+                self.delegate?.didFailWithError(errorString: "An error occurred while setting notification permissions.", error: error!)
+            }
+        }
+    }
+    
+    func registerLocalNotification() {
+        //Create a notification, which is scheduled for 2 days to remind the user to check the weather
+        let center = UNUserNotificationCenter.current()
+        center.removeAllPendingNotificationRequests()
+        
+        let content = UNMutableNotificationContent()
+        content.title = "Are you sure you Know the Weather?"
+        content.body = "Come back to check the weather and make sure you do"
+        content.sound = .default
+        
+        /* Actual trigger in app
+         var dateComponents = DateComponents()
+         dateComponents.day = 2
+         
+         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
+         */
+        
+        //For demo
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 10, repeats: false)
+        
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+        center.add(request)
     }
 }
