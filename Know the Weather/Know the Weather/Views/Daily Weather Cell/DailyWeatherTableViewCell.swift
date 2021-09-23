@@ -14,6 +14,8 @@ class DailyWeatherTableViewCell: UITableViewCell {
     @IBOutlet private weak var dateLabel: UILabel!
     @IBOutlet private weak var conditionImage: UIImageView!
     
+    private let measurementFormatter = MeasurementFormatter()
+    
     static let identifier = "DailyWeatherTableViewCell"
     
     static func nib() -> UINib {
@@ -25,9 +27,15 @@ class DailyWeatherTableViewCell: UITableViewCell {
     }
     
     func configure(with model: Daily, conditionImageString: String){
-        highTempLabel.text = "\(Measurement(value: model.roundedMaxTemp, unit: UnitTemperature.celsius))"
-        lowTempLabel.text = "\(Measurement(value: model.roundedMinTemp, unit: UnitTemperature.celsius))"
+        setupMeasurements()
+        highTempLabel.text = "\(measurementFormatter.string(from: Measurement(value: model.temp.max, unit: UnitTemperature.celsius)))"
+        lowTempLabel.text = "\(measurementFormatter.string(from: Measurement(value: model.temp.min, unit: UnitTemperature.celsius)))"
         dateLabel.text = DateFormatter.weekday.string(from: (Date(timeIntervalSince1970: Double(model.time))))
         conditionImage.image = UIImage(named: conditionImageString)
+    }
+    
+    private func setupMeasurements() {
+        measurementFormatter.numberFormatter.maximumFractionDigits = 0
+        measurementFormatter.numberFormatter.roundingMode = .halfUp
     }
 }

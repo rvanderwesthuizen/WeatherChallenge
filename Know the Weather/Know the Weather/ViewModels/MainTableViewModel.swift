@@ -21,6 +21,7 @@ class MainTableViewModel: NSObject {
     private lazy var service = OpenWeatherMapService()
     private let locationManager = CLLocationManager()
     private var locations = [Location]()
+    private let measurementFormatter = MeasurementFormatter()
     
     //MARK: - Public Variables
     var delegate: MainTableViewModelDelegate?
@@ -39,6 +40,12 @@ class MainTableViewModel: NSObject {
         super.init()
         setupLocation()
         setupLocalNotification()
+        setupMeasurements()
+    }
+    
+    private func setupMeasurements() {
+        measurementFormatter.numberFormatter.maximumFractionDigits = 0
+        measurementFormatter.numberFormatter.roundingMode = .halfUp
     }
     
     func fetchLastKnownLocation(completion: @escaping (Result<Location, Error>) -> Void) {
@@ -236,7 +243,7 @@ extension MainTableViewModel {
     
     var currentTemp: String {
         guard let current = currentWeather else { return "" }
-        return "\(Measurement(value: current.roundedTemp, unit: UnitTemperature.celsius))"
+        return "\(measurementFormatter.string(from: Measurement(value: current.temp, unit: UnitTemperature.celsius)))"
     }
 }
 

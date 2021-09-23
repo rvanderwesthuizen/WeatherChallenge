@@ -14,6 +14,7 @@ class HourWeatherCollectionViewCell: UICollectionViewCell {
     @IBOutlet private weak var conditionImage: UIImageView!
     
     private let viewModel = HourWeatherCollectionViewCellModel()
+    private let measurementFormatter = MeasurementFormatter()
     
     static let identifier = "HourWeatherCollectionViewCell"
     
@@ -22,7 +23,8 @@ class HourWeatherCollectionViewCell: UICollectionViewCell {
     }
     
     func configure(with model: Hourly, currentSunriseTime: Int, currentSunsetTime: Int, nextDaySunriseTime: Int) {
-        tempLabel.text = "\(Measurement(value: model.roundedTemp, unit: UnitTemperature.celsius))"
+        setupMeasurements()
+        tempLabel.text = "\(measurementFormatter.string(from:Measurement(value: model.temp, unit: UnitTemperature.celsius)))"
         timestampLabel.text = viewModel.getTimeFromDate(Date(timeIntervalSince1970: Double(model.time)))
         conditionImage.contentMode = .scaleAspectFit
         conditionImage.image = UIImage(named: viewModel.conditionImage(
@@ -33,4 +35,8 @@ class HourWeatherCollectionViewCell: UICollectionViewCell {
                                         nextDaySunriseTime: nextDaySunriseTime))
     }
     
+    private func setupMeasurements() {
+        measurementFormatter.numberFormatter.maximumFractionDigits = 0
+        measurementFormatter.numberFormatter.roundingMode = .halfUp
+    }
 }

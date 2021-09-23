@@ -29,14 +29,6 @@ struct Current: Codable {
         time < sunset && time >= sunrise
     }
     
-    var roundedTemp: Double {
-        temp.rounded()
-    }
-    
-    var roundedFeelsLikeTemp: Double {
-        feelsLikeTemp.rounded()
-    }
-    
     private enum CodingKeys: String, CodingKey {
         case time = "dt"
         case sunrise = "sunrise"
@@ -56,10 +48,6 @@ struct Hourly: Codable {
     let time: Int
     let temp: Double
     let weather: [Weather]
-    
-    var roundedTemp: Double {
-        temp.rounded()
-    }
     
     private enum CodingKeys: String, CodingKey {
         case time = "dt"
@@ -81,22 +69,6 @@ struct Daily: Codable {
     let clouds: Double
     let chanceOfRain: Double
     let weather: [Weather]
-    
-    var roundedTemp: Double {
-        temp.day.rounded()
-    }
-    
-    var roundedMaxTemp: Double {
-        temp.max.rounded()
-    }
-    
-    var roundedMinTemp: Double {
-        temp.min.rounded()
-    }
-    
-    var roundedFeelsLikeTemp: Double {
-        feelsLikeTemp.day.rounded()
-    }
     
     private enum CodingKeys: String, CodingKey {
         case time = "dt"
