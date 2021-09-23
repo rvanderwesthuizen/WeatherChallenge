@@ -236,8 +236,7 @@ extension MainTableViewModel {
     
     var currentTemp: String {
         guard let current = currentWeather else { return "" }
-        
-        return "\(Measurement(value: current.temp, unit: UnitTemperature.celsius))"
+        return "\(Measurement(value: current.roundedTemp, unit: UnitTemperature.celsius))"
     }
 }
 

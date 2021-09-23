@@ -17,7 +17,7 @@ struct Current: Codable {
     let sunrise: Int
     let sunset: Int
     let temp: Double
-    let feelsLike: Double
+    let feelsLikeTemp: Double
     let humidity: Double
     let pressure: Double
     let windSpeed: Double
@@ -29,11 +29,19 @@ struct Current: Codable {
         time < sunset && time >= sunrise
     }
     
+    var roundedTemp: Double {
+        temp.rounded()
+    }
+    
+    var roundedFeelsLikeTemp: Double {
+        feelsLikeTemp.rounded()
+    }
+    
     private enum CodingKeys: String, CodingKey {
         case time = "dt"
         case sunrise = "sunrise"
         case sunset = "sunset"
-        case feelsLike = "feels_like"
+        case feelsLikeTemp = "feels_like"
         case temp = "temp"
         case humidity = "humidity"
         case pressure = "pressure"
@@ -47,15 +55,15 @@ struct Current: Codable {
 struct Hourly: Codable {
     let time: Int
     let temp: Double
-    let feelsLike: Double
-    let chanceOfRain: Double
     let weather: [Weather]
+    
+    var roundedTemp: Double {
+        temp.rounded()
+    }
     
     private enum CodingKeys: String, CodingKey {
         case time = "dt"
         case temp = "temp"
-        case feelsLike = "feels_like"
-        case chanceOfRain = "pop"
         case weather = "weather"
     }
 }
@@ -65,7 +73,7 @@ struct Daily: Codable {
     let sunrise: Int
     let sunset: Int
     let temp: Temp
-    let feelsLike: Feel
+    let feelsLikeTemp: Feel
     let humidity: Double
     let pressure: Double
     let windSpeed: Double
@@ -74,12 +82,28 @@ struct Daily: Codable {
     let chanceOfRain: Double
     let weather: [Weather]
     
+    var roundedTemp: Double {
+        temp.day.rounded()
+    }
+    
+    var roundedMaxTemp: Double {
+        temp.max.rounded()
+    }
+    
+    var roundedMinTemp: Double {
+        temp.min.rounded()
+    }
+    
+    var roundedFeelsLikeTemp: Double {
+        feelsLikeTemp.day.rounded()
+    }
+    
     private enum CodingKeys: String, CodingKey {
         case time = "dt"
         case sunrise = "sunrise"
         case sunset = "sunset"
         case temp = "temp"
-        case feelsLike = "feels_like"
+        case feelsLikeTemp = "feels_like"
         case humidity = "humidity"
         case pressure = "pressure"
         case windSpeed = "wind_speed"

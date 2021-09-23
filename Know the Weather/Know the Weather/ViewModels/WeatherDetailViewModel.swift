@@ -22,7 +22,7 @@ class WeatherDetailViewModel {
     private let measurementsFormatter = MeasurementFormatter()
     
     func setupInfoLabelsText(with current: Current, chanceOfRain: String) {
-        feelsLikeInfo = "\(measurementsFormatter.string(from: Measurement(value: current.feelsLike, unit: UnitTemperature.celsius)))"
+        feelsLikeInfo = "\(measurementsFormatter.string(from: Measurement(value: current.feelsLikeTemp.rounded(), unit: UnitTemperature.celsius)))"
         windInfo = "\(windDirectionFromDeg(current.windDeg)) \(measurementsFormatter.string(from: Measurement(value: current.windSpeed, unit: UnitSpeed.metersPerSecond)))"
         pressureInfo = "\(current.pressure)"
         chanceOfRainInfo = chanceOfRain
@@ -33,7 +33,7 @@ class WeatherDetailViewModel {
     }
     
     func setupInfoLabelsText(with day: Daily) {
-        feelsLikeInfo = "\(measurementsFormatter.string(from: Measurement(value: day.feelsLike.day, unit: UnitTemperature.celsius)))"
+        feelsLikeInfo = "\(measurementsFormatter.string(from: Measurement(value: day.roundedFeelsLikeTemp, unit: UnitTemperature.celsius)))"
         windInfo = "\(windDirectionFromDeg(day.windDeg)) \(measurementsFormatter.string(from: Measurement(value: day.windSpeed, unit: UnitSpeed.metersPerSecond)))"
         pressureInfo = "\(day.pressure)"
         chanceOfRainInfo = "\(day.chanceOfRain)%"
@@ -44,15 +44,15 @@ class WeatherDetailViewModel {
     }
     
     func setupHeaderLabelsText(with current: Current) {
-        feelsLikeInfo = "FeelsLike: \(measurementsFormatter.string(from: Measurement(value: current.feelsLike, unit: UnitTemperature.celsius)))"
+        feelsLikeInfo = "FeelsLike: \(measurementsFormatter.string(from: Measurement(value: current.roundedFeelsLikeTemp, unit: UnitTemperature.celsius)))"
         summary = current.weather[0].description
-        tempInfo = "\(measurementsFormatter.string(from:Measurement(value: current.temp, unit: UnitTemperature.celsius)))"
+        tempInfo = "\(measurementsFormatter.string(from:Measurement(value: current.roundedTemp, unit: UnitTemperature.celsius)))"
     }
     
     func setupHeaderLabelsText(with dayWeather: Daily) {
-        feelsLikeInfo = "FeelsLike: \(measurementsFormatter.string(from: Measurement(value: dayWeather.feelsLike.day, unit: UnitTemperature.celsius)))"
+        feelsLikeInfo = "FeelsLike: \(measurementsFormatter.string(from: Measurement(value: dayWeather.roundedFeelsLikeTemp, unit: UnitTemperature.celsius)))"
         summary = dayWeather.weather[0].description
-        tempInfo = "\(measurementsFormatter.string(from: Measurement(value: dayWeather.temp.day, unit: UnitTemperature.celsius)))"
+        tempInfo = "\(measurementsFormatter.string(from: Measurement(value: dayWeather.roundedTemp, unit: UnitTemperature.celsius)))"
     }
     
     private func getTimeFormDate(_ date: Date) -> String {
