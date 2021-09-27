@@ -64,7 +64,7 @@ class MainTableViewController: UITableViewController {
         let locationsVC = LocationsTableViewController()
         locationsVC.checkIfLocationIsInList(location: viewModel.currentSelectedLocation!)
         locationsVC.completion = { location in
-            self.viewModel.currentSelectedLocation = location
+            self.viewModel.currentSelectedLocation = CLLocation(latitude: location.lat, longitude: location.lon)
             self.viewModel.fetchWeather()
         }
         let navVC = UINavigationController(rootViewController: locationsVC)

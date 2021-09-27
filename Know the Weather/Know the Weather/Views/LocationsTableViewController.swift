@@ -9,7 +9,7 @@ import UIKit
 import CoreLocation
 
 class LocationsTableViewController: UITableViewController {
-    var completion: ((CLLocation) -> Void)?
+    var completion: ((Location) -> Void)?
     private lazy var viewModel = LocationsTableViewModel()
     
     override func viewDidLoad() {
@@ -24,19 +24,20 @@ class LocationsTableViewController: UITableViewController {
         viewModel.checkIfLocationIsInList(location: location) { result in
             switch result{
             case .success(let bool):
-            if !bool {
+            if bool == false {
                 self.viewModel.addLocation(from: location) { result in
                     switch result{
                     case .success(_):
-                        print()
+                        break
                     case .failure(let error):
                         self.displayErrorAlert("An error happened while trying to retrieve the location's name: \(error)")
+                        return
                     }
                 }
+            }
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                 }
-            }
             case .failure(let error):
                 self.displayErrorAlert("An error happened while checking if the location exists: \(error)")
             }
@@ -56,10 +57,19 @@ class LocationsTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        
-        cell.textLabel?.text = viewModel.locations[indexPath.row].cityName
+        guard let location = viewModel.location(at: indexPath.row) else { return UITableViewCell()}
+        cell.textLabel?.text = location.cityName
+        cell.backgroundColor = .clear
         
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: false)
+        guard let location = viewModel.location(at: indexPath.row) else { return }
+        completion?(location)
+        
+        dismiss(animated: true, completion: nil)
     }
 
 }

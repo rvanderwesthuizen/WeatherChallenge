@@ -61,3 +61,9 @@ class LocationsTableViewModel {
         }
     }
 }
+
+extension LocationsTableViewModel {
+    func location(at index: Int) -> Location? {
+        locations[safe: index]
+    }
+}
