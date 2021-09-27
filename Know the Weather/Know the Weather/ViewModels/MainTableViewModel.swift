@@ -11,7 +11,7 @@ import MapKit
 import UserNotifications
 
 protocol MainTableViewModelDelegate {
-    func didFetchWeather(_ weather: WeatherData)
+    func didFetchWeather()
     func didFailWithError(errorString: String, error: Error)
 }
 
@@ -84,7 +84,7 @@ class MainTableViewModel: NSObject {
                 self.currentWeather = data.current
                 self.dailyWeather = data.daily
                 self.hourlyWeather = data.hourly
-                self.delegate?.didFetchWeather(data)
+                self.delegate?.didFetchWeather()
             }
         }
     }

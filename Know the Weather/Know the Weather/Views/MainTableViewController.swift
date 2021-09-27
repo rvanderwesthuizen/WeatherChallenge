@@ -154,7 +154,7 @@ class MainTableViewController: UITableViewController {
 }
 
 extension MainTableViewController: MainTableViewModelDelegate {
-    func didFetchWeather(_ weather: WeatherData) {
+    func didFetchWeather() {
         DispatchQueue.main.async {
             self.tableView.reloadData()
             guard let current = self.viewModel.currentWeather else { return }

@@ -10,10 +10,10 @@ import XCTest
 import CoreLocation
 
 class MainTableViewTest: XCTestCase {
-    private let mainTableViewModel = MainTableViewModel()
-    private let apiCaller = OpenWeatherMapService()
+    private var implementationUnderTest: MainTableViewModel!
+    
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        implementationUnderTest = MainTableViewModel()
     }
 
     override func tearDownWithError() throws {
@@ -21,8 +21,8 @@ class MainTableViewTest: XCTestCase {
     }
     
     func testCurrentCityDoesReturnWhenTheCityExists() {
-        mainTableViewModel.currentSelectedLocation = CLLocation(latitude: 37.33233141, longitude: -122.0312186)
-        mainTableViewModel.currentCity { result in
+        implementationUnderTest.currentSelectedLocation = CLLocation(latitude: 37.33233141, longitude: -122.0312186)
+        implementationUnderTest.currentCity { result in
             switch result {
             case .success(let city):
                 XCTAssert(city == "Cupertino")
@@ -33,13 +33,31 @@ class MainTableViewTest: XCTestCase {
     }
     
     func testCurrentCityCausesErrorWhenTheCityDoesNotExist() {
-        mainTableViewModel.currentSelectedLocation = CLLocation(latitude: 0, longitude: 0)
-        mainTableViewModel.currentCity { result in
+        implementationUnderTest.currentSelectedLocation = CLLocation(latitude: 0, longitude: 0)
+        implementationUnderTest.currentCity { result in
             switch result {
             case .success(_):
                 XCTFail()
             case .failure(_):
                 XCTAssertTrue(true)
+            }
+        }
+    }
+    
+    func testForFailureWhenIndexOutOfBounds() {
+        if let _ = implementationUnderTest.dailyWeather(at: -1),
+           let _ = implementationUnderTest.dailyWeatherSunrise(at: -1) {
+            XCTFail()
+        }
+    }
+    
+    func testFetchLastKnownLocation() {
+        implementationUnderTest.fetchLastKnownLocation { result in
+            switch result{
+            case .success(let location):
+                XCTAssertNotNil(location)
+            case .failure(_):
+                XCTFail()
             }
         }
     }

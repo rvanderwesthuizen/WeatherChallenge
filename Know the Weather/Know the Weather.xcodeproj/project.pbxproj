@@ -30,10 +30,10 @@
 		C986445326E6015A00CEA8FE /* LocationsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C986445226E6015A00CEA8FE /* LocationsTableViewController.swift */; };
 		C986445526E6061200CEA8FE /* LocationsTableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C986445426E6061200CEA8FE /* LocationsTableViewModel.swift */; };
 		C986445726E6075D00CEA8FE /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C986445626E6075D00CEA8FE /* Constants.swift */; };
-		C986445926E6111200CEA8FE /* DailyWeatherTableViewCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C986445826E6111200CEA8FE /* DailyWeatherTableViewCellTests.swift */; };
 		C986445B26E6116700CEA8FE /* MainTableViewTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C986445A26E6116700CEA8FE /* MainTableViewTest.swift */; };
 		C986445D26E61C5100CEA8FE /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = C986445C26E61C5100CEA8FE /* Location.swift */; };
 		C986446026E6237A00CEA8FE /* PlistHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C986445F26E6237A00CEA8FE /* PlistHandler.swift */; };
+		C98E670D2701931D005A8A7C /* WeatherDetailViewTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98E670C2701931D005A8A7C /* WeatherDetailViewTest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,10 +74,10 @@
 		C986445226E6015A00CEA8FE /* LocationsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsTableViewController.swift; sourceTree = "<group>"; };
 		C986445426E6061200CEA8FE /* LocationsTableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationsTableViewModel.swift; sourceTree = "<group>"; };
 		C986445626E6075D00CEA8FE /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		C986445826E6111200CEA8FE /* DailyWeatherTableViewCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyWeatherTableViewCellTests.swift; sourceTree = "<group>"; };
 		C986445A26E6116700CEA8FE /* MainTableViewTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTableViewTest.swift; sourceTree = "<group>"; };
 		C986445C26E61C5100CEA8FE /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		C986445F26E6237A00CEA8FE /* PlistHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlistHandler.swift; sourceTree = "<group>"; };
+		C98E670C2701931D005A8A7C /* WeatherDetailViewTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailViewTest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,8 +134,8 @@
 			isa = PBXGroup;
 			children = (
 				C96F47FA26D8F0DB005553EE /* Info.plist */,
-				C986445826E6111200CEA8FE /* DailyWeatherTableViewCellTests.swift */,
 				C986445A26E6116700CEA8FE /* MainTableViewTest.swift */,
+				C98E670C2701931D005A8A7C /* WeatherDetailViewTest.swift */,
 			);
 			path = "Know the WeatherTests";
 			sourceTree = "<group>";
@@ -336,8 +336,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C98E670D2701931D005A8A7C /* WeatherDetailViewTest.swift in Sources */,
 				C986445B26E6116700CEA8FE /* MainTableViewTest.swift in Sources */,
-				C986445926E6111200CEA8FE /* DailyWeatherTableViewCellTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
