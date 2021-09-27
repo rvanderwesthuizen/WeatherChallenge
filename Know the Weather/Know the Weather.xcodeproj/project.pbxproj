@@ -34,6 +34,7 @@
 		C986445D26E61C5100CEA8FE /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = C986445C26E61C5100CEA8FE /* Location.swift */; };
 		C986446026E6237A00CEA8FE /* PlistHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C986445F26E6237A00CEA8FE /* PlistHandler.swift */; };
 		C98E670D2701931D005A8A7C /* WeatherDetailViewTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98E670C2701931D005A8A7C /* WeatherDetailViewTest.swift */; };
+		C98E670F2701AC51005A8A7C /* temporaryJsonFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98E670E2701AC51005A8A7C /* temporaryJsonFile.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +79,7 @@
 		C986445C26E61C5100CEA8FE /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		C986445F26E6237A00CEA8FE /* PlistHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlistHandler.swift; sourceTree = "<group>"; };
 		C98E670C2701931D005A8A7C /* WeatherDetailViewTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailViewTest.swift; sourceTree = "<group>"; };
+		C98E670E2701AC51005A8A7C /* temporaryJsonFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = temporaryJsonFile.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,6 +163,7 @@
 				C986445F26E6237A00CEA8FE /* PlistHandler.swift */,
 				C91A336026F335C700942340 /* WeatherScore.swift */,
 				C971F55326F89668007892AF /* GlobalExtentions.swift */,
+				C98E670E2701AC51005A8A7C /* temporaryJsonFile.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -317,6 +320,7 @@
 				C986445D26E61C5100CEA8FE /* Location.swift in Sources */,
 				C986444326E1F19600CEA8FE /* HourlyWeatherTableViewCell.swift in Sources */,
 				C96F481926D90F6A005553EE /* OpenWeatherMapService.swift in Sources */,
+				C98E670F2701AC51005A8A7C /* temporaryJsonFile.swift in Sources */,
 				C96F47E426D8F0D7005553EE /* SceneDelegate.swift in Sources */,
 				C986446026E6237A00CEA8FE /* PlistHandler.swift in Sources */,
 				C91A336826F3900C00942340 /* WeatherDetailViewController.swift in Sources */,
